@@ -1,0 +1,183 @@
+/*****************************************************
+ _______           ______   _______  _______  _______ 
+(  ____ \|\     /|(  ___ \ (  ____ \(  ____ \(  ____ \
+| (    \/| )   ( || (   ) )| (    \/| (    \/| (    \/
+| (_____ | |   | || (__/ / | |      | (_____ | (_____ 
+(_____  )| |   | ||  __ (  | |      (_____  )(_____  )
+      ) || |   | || (  \ \ | |            ) |      ) |
+/\____) || (___) || )___) )| (____/\/\____) |/\____) |
+\_______)(_______)|/ \___/ (_______/\_______)\_______)
+
+*****************************************************/
+
+/* Third party components (semantic-ui) */
+/*@import '../node_modules/semantic-ui-css/semantic.min.css';*/
+
+/* General Stuff */
+:root {
+
+  height: 100%;
+  width: 100%;
+  overflow:hidden;
+  font-family: monospace;
+
+}
+
+
+/* Sections */
+#ui-sub {
+
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  clear:left;
+  float:left;
+  background-color: #202020;
+
+}
+#ui-sub main {
+
+  float:left;
+
+  width: 100%;
+
+  height: 100%;
+
+  position:relative;
+
+  right:50%;
+
+}
+#ui-sub .ui-block {
+
+  position:relative;
+
+  height:100%;
+
+  left:50%;
+
+  overflow:hidden;
+
+  float:left;
+
+  -webkit-transition: left 0.4s ease-in-out;
+
+  transition: left 0.4s ease-in-out;
+
+}
+#ui-sub .ui-block:first-child {
+
+  width:30%;
+
+}
+#ui-sub .ui-block:last-child {
+
+  width:70%;
+
+}
+#ui-sub .hidden{
+
+  display: none!important;
+
+}
+#ui-subcss-editor {
+
+  position:absolute;
+  width: 100%;
+  height: 100%;
+
+}
+#ui-sub {
+
+/*	.ui-subcss-video {
+
+	  width: 100%;
+	  height: 70%;
+
+	}
+
+
+	.ui-subcss-videomap {
+
+	  border-top: 1px solid rgba(248,248,248, 0.1);
+	  width: 100%;
+	  height: 30%;
+
+	}*/
+	
+}
+#ui-sub .overlay {
+
+  position:absolute;
+
+  margin: 40px;
+
+  width: calc(100% - 80px);
+
+  height: calc(100% - 80px);
+
+  text-align: center;
+
+  display: table;
+
+  cursor:pointer;
+
+  background-color: #272822;
+
+  border: 1px solid #272822;
+
+  box-shadow: 0 10px 10px #000;
+
+}
+#ui-sub .overlay p {
+
+  text-align: center;
+
+  color: #FFFFFF;
+
+  color: rgba(255, 255, 255, 0.1);
+
+  text-shadow: -1px -1px #969696;
+
+  text-shadow: -1px -1px rgba(150, 150, 150, 0.1);
+
+  text-rendering: optimizeLegibility;
+
+  cursor:pointer;
+
+  font-size:30px;
+
+  display: table-cell;
+
+  vertical-align: middle;
+
+}
+#ui-sub .overlay p.hidden{
+
+  display:none;
+
+}
+#ui-sub .overlay input {
+
+  position:absolute;
+
+  top:-100px;
+
+  left:0;
+
+  width:1px;
+
+  height:1px;
+
+}
+#ui-sub .overlay video {
+
+  overflow: hidden;
+
+  width:100%;
+
+  height:100%;
+
+}

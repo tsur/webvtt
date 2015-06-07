@@ -1,0 +1,50 @@
+{
+  "name": "subcss",
+  "productName": "subcss",
+  "version": "0.0.1",
+  "description": "Set subtitle to your videos by just using CSS",
+  "homepage": "https://http://tsur.github.io/subcss",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsur/subcss"
+  },
+  "bugs": "https://github.com/tsur/subcss/issues",
+  "main": "./electron.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "brace": "^0.5.1",
+    "delegate-dom": "0.0.1",
+    "virtual-dom": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel": "^5.5.4",
+    "babelify": "^6.1.1",
+    "browserify": "^10.2.1",
+    "browserify-incremental": "^3.0.0",
+    "cssnext": "^1.4.0",
+    "electron-debug": "^0.1.0",
+    "electron-packager": "^4.1.2",
+    "electron-prebuilt": "^0.27.2",
+    "exorcist": "^0.4.0",
+    "http-server": "^0.8.0",
+    "postcss-cli": "^1.3.1",
+    "postcss-nested": "^0.3.1",
+    "semantic-ui-css": "^1.12.3",
+    "silence-chromium": "^2.0.0"
+  },
+  "watch": {},
+  "scripts": {
+    "start:desktop": "electron electron.js 2>&1 | silence-chromium",
+    "start:web": "http-server",
+    "deploy:gh-pages": "git checkout gh-pages && git merge --no-ff develop -m 'Merged develop into gh-pages' && git push origin gh-pages && git checkout develop",
+    "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
+    "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
+    "build:web": "npm run build-css && npm run build-js",
+    "probuild": "electron-packager . $npm_package_productName-$npm_package_version --prune --asar --ignore=node_modules/electron-prebuilt --ignore=node_modules/electron-packager --ignore=.git"
+  },
+  "config": {}
+}

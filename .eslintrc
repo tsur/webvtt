@@ -1,0 +1,44 @@
+---
+parser: babel-eslint
+
+ecmaFeatures:
+  modules: true
+
+plugins: 
+  - "smells"
+  
+env:
+  es6: true
+  browser: true
+  node: true
+
+# 0: off, 1: warning, 2: error
+rules:
+  # semicolons are useless
+  semi: [2, "never"]
+
+  quotes: [2, "double"]
+
+  # 2 spaces indentation
+  indent: [2, 2]
+
+  # trailing coma are cool for diff
+  comma-dangle: [2, "always-multiline"]
+
+  # enforce comma at eol (never before)
+  comma-style: [2, "last"]
+  no-underscore-dangle: 0
+  valid-jsdoc: 2
+
+  max-statements:[2, 16]
+  max-depth:[2, 5]
+  complexity:[2, 7]
+  max-len:[2, 65]
+  max-params:[2, 1]
+  max-nested-callbacks:[2, 0]
+
+  smells/no-switch: 1
+  smells/no-complex-switch-case: 1
+  smells/no-setinterval: 1
+  smells/no-this-assign: 1
+  smells/no-complex-string-concat: 1
