@@ -46,13 +46,54 @@
 			display:none;
 		}
 
-		input {
+		.file {
 
 			position:absolute;
 			top:-100px;
 			left:0;
 			width:1px;
 			height:1px;
+		}
+
+		.youtube{
+
+			padding: 15px;
+			font-size: 20px;
+			outline: none;
+			color: rgba(255, 255, 255, 0.1);
+			background-color: #272822;
+			border: 3px solid #202020;
+			width: 300px;
+			height: 40px;
+			z-index: 1000;
+			
+			position:absolute;
+			top:50%;
+			left:50%;
+
+			margin-left: -165px;
+			margin-top:35px;
+			
+		}
+
+		.youtube::-webkit-input-placeholder {
+		   color: rgba(255, 255, 255, 0.1);
+		   text-align: center;
+		}
+
+		.youtube:-moz-placeholder { /* Firefox 18- */
+		   color: rgba(255, 255, 255, 0.1); 
+		   text-align: center;
+		}
+
+		.youtube::-moz-placeholder {  /* Firefox 19+ */
+		   color: rgba(255, 255, 255, 0.1); 
+		   text-align: center;
+		}
+
+		.youtube:-ms-input-placeholder {  
+		   color: rgba(255, 255, 255, 0.1);  
+		   text-align: center;
 		}
 
 		video {
