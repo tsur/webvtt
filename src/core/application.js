@@ -23,15 +23,15 @@ import Viewer from '../modules/viewer/application';
 
 inherits(App, EventEmitter);
 
-function App(currentWindow) {
+function App(currentWindow, proxyUrl) {
 
   if (!(this instanceof App)) return new App(currentWindow);
 
-  this.init(currentWindow);
+  this.init(currentWindow, proxyUrl);
 
 }
 
-App.prototype.init = function(currentWindow) {
+App.prototype.init = function(currentWindow, proxyUrl) {
 
   this.currentWindow = currentWindow;
   this._notifications = 0;
@@ -57,7 +57,7 @@ App.prototype.init = function(currentWindow) {
   this.views = {
 
     editor: new Editor(self),
-    viewer: new Viewer(self)
+    viewer: new Viewer(self, proxyUrl)
 
   }
 

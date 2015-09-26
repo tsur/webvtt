@@ -7,13 +7,15 @@ from 'util';
 
 import App from '../core/application';
 
-inherits(Web, App)
+const proxyUrl = "http://localhost:8989";
+
+inherits(Web, App);
 
 function Web() {
 
   if (!(this instanceof Web)) return new Web();
 
-  App.call(this);
+  App.call(this, null, proxyUrl);
 
   this.on('openUrl', function(url) {
 

@@ -45,6 +45,7 @@
   "scripts": {
     "start:desktop": "electron electron.js 2>&1 | silence-chromium",
     "start:web": "node src/node/server.js",
+    "start:tubeproxy": "node src/node/proxy.js",
     "deploy:gh-pages": "git checkout gh-pages && git merge --no-ff develop -m 'Merged develop into gh-pages' && git push origin gh-pages && git checkout develop",
     "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
     "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
