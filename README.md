@@ -16,6 +16,12 @@ Point now your browser on localhost:8080 to play it. If you wanna try the deskto
 npm run start:desktop
 ```
 
+In case you also want to use tubes, run first the streaming proxy server:
+
+```bash
+npm run start:tubeproxy
+```
+
 To deploy remotely, make sure you commit and/or push all your changes to the develop branch. Once your done, run:
 
 ```bash
