@@ -95,7 +95,7 @@ var http = require("http");
 var qs = require('querystring');
 var url = require('url');
 var request = require('request');
-var port = process.env.PORT || 8989;
+var port = process.env.PORT || 8000;
 var ip = 'localhost';
 
 var streamer = function(req, res) {
@@ -179,6 +179,6 @@ var streamer = function(req, res) {
 var server = http.createServer(streamer);
 
 // Listen on the specified IP and port.
-server.listen(port,ip, function(){
+server.listen(port, function(){
   console.log('Server #%d listening at %s:%d', process.pid, ip, port);
 });
