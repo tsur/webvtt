@@ -19,9 +19,10 @@ import getYoutube from '../../node/youtube';
 
 inherits(Viewer, EventEmitter);
 
-function Viewer(app) {
+function Viewer(app, proxyUrl) {
 
   this.app = app;
+  this.proxyUrl = proxyUrl;
 
 }
 
@@ -58,7 +59,7 @@ Viewer.prototype.initViewer = function() {
 
     if (e.keyCode === 13 || e.which === 13) {
 
-      getYoutube(this.inputYoutube.value, (url) => {
+      getYoutube(this.inputYoutube.value, this.proxyUrl, (url) => {
 
         if (url) this.loadVideo({
           data: url

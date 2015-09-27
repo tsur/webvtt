@@ -1,7 +1,7 @@
 var http = require("http");
 var express = require("express");
 var bodyParser = require('body-parser');
-var youtube = require('./youtube');
+var youtube = require('./youtube_external_service');
 var app = express();
 var port = process.env.PORT || 8080;
 
@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(express.static(__dirname + "/../.."))
+app.use(express.static(__dirname + "/../.."));
 
 app.post('/youtube', function(req, res) {
 
@@ -32,3 +32,5 @@ app.post('/youtube', function(req, res) {
 
 var server = http.createServer(app);
 server.listen(port);
+
+console.log('Open browser at http://localhost:8080 and run "npm run start:tubeproxy" to use tubes');

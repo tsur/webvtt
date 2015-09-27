@@ -9,6 +9,10 @@ import remote from 'remote';
 import shell from 'shell';
 import App from '../core/application';
 
+//@TODO: remove the server as it's actually not needed in electron but just the functionality provided by the server
+import proxyServer from '../node/proxy.js';
+const proxyUrl = "http://localhost:8989";
+
 const remoteApp = remote.require('app');
 const browserWindow = remote.require('browser-window');
 const currentWindow = remote.getCurrentWindow();
@@ -38,7 +42,7 @@ function Desktop() {
 
   });
 
-  App.call(this, currentWindow);
+  App.call(this, currentWindow, proxyUrl);
 
 }
 

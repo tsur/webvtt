@@ -16,16 +16,16 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
+    "request": "^2.57.0"
+  },
+  "devDependencies": {
     "body-parser": "^1.12.4",
     "brace": "^0.5.1",
     "browser-request": "^0.3.3",
     "delegate-dom": "0.0.1",
     "express": "^4.12.4",
     "htmlparser2": "^3.8.3",
-    "request": "^2.57.0",
-    "virtual-dom": "^2.0.1"
-  },
-  "devDependencies": {
+    "virtual-dom": "^2.0.1",
     "babel": "^5.5.4",
     "babelify": "^6.1.1",
     "browserify": "^10.2.1",
@@ -43,9 +43,12 @@
   },
   "watch": {},
   "scripts": {
+    "start": "npm run start:tubeproxy",
     "start:desktop": "electron electron.js 2>&1 | silence-chromium",
     "start:web": "node src/node/server.js",
+    "start:tubeproxy": "node src/node/proxy.js",
     "deploy:gh-pages": "git checkout gh-pages && git merge --no-ff develop -m 'Merged develop into gh-pages' && git push origin gh-pages && git checkout develop",
+    "deploy:heroku": "git checkout master && git merge --no-ff develop -m 'Merged into develop' && git push origin master && git push heroku master && git checkout develop",
     "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
     "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
     "build:web": "npm run build-css && npm run build-js",

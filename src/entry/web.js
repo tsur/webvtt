@@ -7,13 +7,15 @@ from 'util';
 
 import App from '../core/application';
 
-inherits(Web, App)
+const proxyUrl = "https://stormy-forest-7144.herokuapp.com";
+
+inherits(Web, App);
 
 function Web() {
 
   if (!(this instanceof Web)) return new Web();
 
-  App.call(this);
+  App.call(this, null, proxyUrl);
 
   this.on('openUrl', function(url) {
 
