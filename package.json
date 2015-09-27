@@ -16,11 +16,16 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "brace": "^0.5.1",
-    "delegate-dom": "0.0.1",
-    "virtual-dom": "^2.0.1"
+    "request": "^2.57.0"
   },
   "devDependencies": {
+    "body-parser": "^1.12.4",
+    "brace": "^0.5.1",
+    "browser-request": "^0.3.3",
+    "delegate-dom": "0.0.1",
+    "express": "^4.12.4",
+    "htmlparser2": "^3.8.3",
+    "virtual-dom": "^2.0.1",
     "babel": "^5.5.4",
     "babelify": "^6.1.1",
     "browserify": "^10.2.1",
@@ -38,13 +43,16 @@
   },
   "watch": {},
   "scripts": {
+    "start": "npm run start:tubeproxy",
     "start:desktop": "electron electron.js 2>&1 | silence-chromium",
-    "start:web": "http-server",
+    "start:web": "node src/node/server.js",
+    "start:tubeproxy": "node src/node/proxy.js",
     "deploy:gh-pages": "git checkout gh-pages && git merge --no-ff develop -m 'Merged develop into gh-pages' && git push origin gh-pages && git checkout develop",
+    "deploy:heroku": "git checkout master && git merge --no-ff develop -m 'Merged into develop' && git push origin master && git push heroku master && git checkout develop",
     "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
     "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
     "build:web": "npm run build-css && npm run build-js",
-    "probuild": "electron-packager . $npm_package_productName-$npm_package_version --prune --asar --ignore=node_modules/electron-prebuilt --ignore=node_modules/electron-packager --ignore=.git"
+    "package": "electron-packager ./ $npm_package_productName-$npm_package_version --platform=linux --arch=x64 --version=0.28.1 --ignore='node_modules/(electron-packager|electron-prebuilt|electron-debug|babelify|browserify|browserify-incremental|cssnext|exorcist|beefy|http-server|postcss-cli|postcss-nested|semantic-ui-css|silence-chromium|browser-request|express|body-parser)'"
   },
   "config": {}
 }
