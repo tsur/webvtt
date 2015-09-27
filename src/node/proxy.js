@@ -178,6 +178,9 @@ var streamer = function(req, res) {
 
 var server = http.createServer(streamer);
 
+// IMPORTANT: When using heroku, never gives the ip as server.listen(port, ip, function(){...}) or it will not work
+// Check logs on heroku by running: heroku logs --tail
+
 // Listen on the specified IP and port.
 server.listen(port, function(){
   console.log('Server #%d listening at %s:%d', process.pid, ip, port);
