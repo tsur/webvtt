@@ -7,7 +7,7 @@ from 'util';
 
 import App from '../core/application';
 
-const proxyUrl = "http://localhost:8989";
+const proxyUrl = "https://stormy-forest-7144.herokuapp.com";
 
 inherits(Web, App);
 

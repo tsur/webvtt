@@ -22927,7 +22927,7 @@ var _coreApplication = require('../core/application');
 
 var _coreApplication2 = _interopRequireDefault(_coreApplication);
 
-var proxyUrl = 'http://localhost:8989';
+var proxyUrl = 'https://stormy-forest-7144.herokuapp.com';
 
 (0, _util.inherits)(Web, _coreApplication2['default']);
 
