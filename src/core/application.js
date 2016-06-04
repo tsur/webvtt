@@ -59,7 +59,7 @@ App.prototype.init = function(currentWindow, proxyUrl) {
     editor: new Editor(self),
     viewer: new Viewer(self, proxyUrl)
 
-  }
+  };
 
   // Initial DOM tree render
   let tree = this.render();
@@ -81,7 +81,7 @@ App.prototype.init = function(currentWindow, proxyUrl) {
 
   this.emit('rendered');
 
-}
+};
 
 App.prototype.render = function(model) {
 
@@ -98,7 +98,7 @@ App.prototype.render = function(model) {
     }, views.viewer.render())
   ]);
 
-}
+};
 
 window.App = App;
 
