@@ -18,7 +18,7 @@ from 'virtual-dom';
 import plyr from 'plyr';
 
 import getYoutube from '../../node/youtube';
-//import exportVideo from '../../node/export_video';
+import exportVideo from '../../node/export_video';
 
 inherits(Viewer, EventEmitter);
 
@@ -46,6 +46,7 @@ Viewer.prototype.initViewer = function() {
   this.inputYoutube = document.querySelector('.overlay input.youtube');
   this.video = document.querySelector('.overlay video');
   this.overlay = document.querySelector('.overlay');
+  this.exportBtn = document.querySelector('.export');
 
   this.video.setAttribute('crossorigin', 'anonymous');
 
@@ -58,6 +59,7 @@ Viewer.prototype.initViewer = function() {
   };
 
   this.overlay.addEventListener('click', overlayClickEvent);
+  this.exportBtn.addEventListener('click', event => this.download());
 
   this.input.addEventListener('change', (e) => this.processVideoFile(e, 'change'));
 
@@ -107,7 +109,6 @@ Viewer.prototype.loadVideo = function(file) {
   this.video.classList.remove('hidden');
   this.inputYoutube.classList.add('hidden');
   this.player = plyr.setup(this.overlay, {captions:{defaultActive: true}})[0];
-  //this.file = file;
 
   const videoType = file.type ? file.type : 'video/mp4';
   const src = file.url ? {src: file.id, type: 'youtube'} : {src: window.URL.createObjectURL(file), type: videoType};
@@ -138,18 +139,41 @@ Viewer.prototype.processVideoFile = function(event, eventType) {
 
 };
 
-Viewer.prototype.render = function(model) {
+Viewer.prototype.download = function() {
+
+  exportVideo(this.app.views.editor.getText(), srt => {
+
+    const link = document.createElement('a');
+
+    link.download = "subtitles.srt";
+    link.href = "data:text/plain,"+encodeURIComponent(srt);
+
+    link.click();
+
+  });
+
+};
+
+Viewer.prototype.render = function() {
 
   this.app.on('rendered', () => this.initViewer());
 
-  return h('.overlay.plyr', [h('input.file', {
-    type: 'file'
-  }), h('p', 'DROP YOUR TUBE HERE'), h('input.youtube', {
-    type: 'text',
-    placeholder: 'Type your tube'
-  }), h('video.hidden', {
-    controls: true
-  }, [h('source#ui-video-source')])]);
+  return h('div', [
+      h('.export', [h('img.icon', {src: './export.svg'})]),
+      h('.overlay.plyr', [
+        h('input.file', {
+          type: 'file'
+        }),
+        h('p', 'DROP YOUR TUBE HERE'),
+        h('input.youtube', {
+          type: 'text',
+          placeholder: 'Type your tube'
+        }),
+        h('video.hidden', {
+          controls: true
+        }, [h('source#ui-video-source')])
+      ])
+    ]);
 
 };
 

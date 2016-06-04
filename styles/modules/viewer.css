@@ -22,11 +22,13 @@
 			font-size:30px;
 			display: table-cell;
 			vertical-align: middle;
+
 		}
 
 		p.hidden{
 
 			display:none;
+
 		}
 
 		.file {
@@ -36,6 +38,7 @@
 			left:0;
 			width:1px;
 			height:1px;
+
 		}
 
 		.youtube{
@@ -86,5 +89,28 @@
 		}
 
 	}
+
+  .export {
+
+    position: absolute;
+    background-color: #272822;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    top: 10px;
+    cursor: pointer;
+    padding: 5px;
+
+    .icon {
+
+      width: 15px;
+      height: 15px;
+
+    }
+
+    .icon:hover path {
+      fill: white;
+    }
+  }
 
 }

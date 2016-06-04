@@ -2,6 +2,8 @@
 
 A WebVTT experiment for setting up subtitles to your videos on the fly. A demo is available [here](http://tsur.github.io/webvtt). You may also build a desktop version based on [Electron](https://github.com/atom/electron).
 
+Once it's done, export it to a .srt file and added to your third party player software as VLC to add it.
+
 # Setting up
 
 To deploy it on your local machine, just follow the steps below:

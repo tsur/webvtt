@@ -60,3 +60,6 @@
 #ui-sub .overlay .youtube::-moz-placeholder {/* Firefox 19+ */color: rgba(255, 255, 255, 0.1);text-align: center;}
 #ui-sub .overlay .youtube:-ms-input-placeholder {color: rgba(255, 255, 255, 0.1);text-align: center;}
 #ui-sub .overlay video {overflow: hidden;width:100%;/*height:100%;*/}
+#ui-sub .export {position: absolute;background-color: #272822;width: 15px;height: 15px;text-align: center;top: 10px;cursor: pointer;padding: 5px;}
+#ui-sub .export .icon {width: 15px;height: 15px;}
+#ui-sub .export .icon:hover path {fill: white;}

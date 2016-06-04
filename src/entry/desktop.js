@@ -5,12 +5,12 @@ import {
 }
 from 'util';
 import path from 'path';
-import remote from 'remote';
-import shell from 'shell';
+import {remote} from 'electron';
+import {shell} from 'electron';
 import App from '../core/application';
 
 //@TODO: remove the server as it's actually not needed in electron but just the functionality provided by the server
-import proxyServer from '../node/proxy.js';
+//import proxyServer from '../node/proxy.js';
 const proxyUrl = "http://localhost:8000";
 const currentWindow = remote.getCurrentWindow();
 
