@@ -46,7 +46,7 @@
   .ui-block:first-child {
 
     width:30%;
-    
+
   }
 
   .ui-block:last-child {
@@ -59,6 +59,10 @@
 
     display: none!important;
 
+  }
+
+  .plyr__video-wrapper{
+    height: calc(100% - 80px);
   }
 
 }

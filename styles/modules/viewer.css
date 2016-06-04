@@ -1,21 +1,5 @@
 #ui-sub {
 
-/*	.ui-subcss-video {
-
-	  width: 100%;
-	  height: 70%;
-
-	}
-
-
-	.ui-subcss-videomap {
-
-	  border-top: 1px solid rgba(248,248,248, 0.1);
-	  width: 100%;
-	  height: 30%;
-
-	}*/
-
 	.overlay {
 
 		position:absolute;
@@ -24,10 +8,9 @@
 		height: calc(100% - 80px);
 		text-align: center;
 		display: table;
-		cursor:pointer;
-	  	background-color: #272822;
-	  	border: 1px solid #272822;
-	  	box-shadow: 0 10px 10px #000;
+    background-color: #272822;
+    border: 1px solid #272822;
+    box-shadow: 0 10px 10px #000;
 
 		p {
 
@@ -66,14 +49,13 @@
 			width: 300px;
 			height: 40px;
 			z-index: 1000;
-			
+
 			position:absolute;
 			top:50%;
 			left:50%;
 
-			margin-left: -165px;
-			margin-top:35px;
-			
+			transform: translate(-50%, 70%);
+
 		}
 
 		.youtube::-webkit-input-placeholder {
@@ -82,17 +64,17 @@
 		}
 
 		.youtube:-moz-placeholder { /* Firefox 18- */
-		   color: rgba(255, 255, 255, 0.1); 
+		   color: rgba(255, 255, 255, 0.1);
 		   text-align: center;
 		}
 
 		.youtube::-moz-placeholder {  /* Firefox 19+ */
-		   color: rgba(255, 255, 255, 0.1); 
+		   color: rgba(255, 255, 255, 0.1);
 		   text-align: center;
 		}
 
-		.youtube:-ms-input-placeholder {  
-		   color: rgba(255, 255, 255, 0.1);  
+		.youtube:-ms-input-placeholder {
+		   color: rgba(255, 255, 255, 0.1);
 		   text-align: center;
 		}
 
@@ -100,9 +82,9 @@
 
 			overflow: hidden;
 			width:100%;
-			height:100%;
+			/*height:100%;*/
 		}
 
 	}
-	
+
 }
