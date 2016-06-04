@@ -26157,6 +26157,8 @@ var _nodeYoutube = require('../../node/youtube');
 
 var _nodeYoutube2 = _interopRequireDefault(_nodeYoutube);
 
+//import exportVideo from '../../node/export_video';
+
 (0, _util.inherits)(Viewer, _events.EventEmitter);
 
 function Viewer(app, proxyUrl) {
@@ -26253,8 +26255,8 @@ Viewer.prototype.loadVideo = function (file) {
   this.overlayText.classList.add('hidden');
   this.video.classList.remove('hidden');
   this.inputYoutube.classList.add('hidden');
-
   this.player = _plyr2['default'].setup(this.overlay, { captions: { defaultActive: true } })[0];
+  //this.file = file;
 
   var videoType = file.type ? file.type : 'video/mp4';
   var src = file.url ? { src: file.id, type: 'youtube' } : { src: window.URL.createObjectURL(file), type: videoType };

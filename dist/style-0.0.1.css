@@ -50,25 +50,6 @@
   height: 100%;
 
 }
-#ui-sub {
-
-/*	.ui-subcss-video {
-
-	  width: 100%;
-	  height: 70%;
-
-	}
-
-
-	.ui-subcss-videomap {
-
-	  border-top: 1px solid rgba(248,248,248, 0.1);
-	  width: 100%;
-	  height: 30%;
-
-	}*/
-
-}
 #ui-sub .overlay {position:absolute;margin: 40px;width: calc(100% - 80px);height: calc(100% - 80px);text-align: center;display: table;background-color: #272822;border: 1px solid #272822;box-shadow: 0 10px 10px #000;}
 #ui-sub .overlay p {text-align: center;color: rgba(255, 255, 255, 0.1);text-shadow: -1px -1px rgba(150, 150, 150, 0.1);text-rendering: optimizeLegibility;cursor:pointer;font-size:30px;display: table-cell;vertical-align: middle;}
 #ui-sub .overlay p.hidden{display:none;}

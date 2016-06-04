@@ -1,14 +1,24 @@
-module.exports = exports = function(url, proxy, fn) {
+var ffmpeg = require('fluent-ffmpeg');
+var vtt2srt = require('vtt-to-srt');
+var fs = require('fs');
 
-  var isYoutube = url && url.match(/(?:youtu|youtube)(?:\.com|\.be)\/([\w\W]+)/i);
+module.exports = exports = function(file, vttString, fn) {
 
-  if (!isYoutube) return fn(false);
+  const srtStream = vtt2srt();
 
-  var mp4url = proxy + "?video=";
-  var id = isYoutube[1].match(/watch\?v=|[\w\W]+/gi);
+  srtStream.write(vttString);
+  srtStream.end();
+  srtStream.pipe(fs.createWriteStream(__dirname + '/subtitles.srt'));
 
-  id = ((id.length > 1) ? id.splice(1) : id).toString();
+  ffmpeg(file)
+    .outputOptions(
+      '-vf subtitles='+__dirname + '/subtitles.srt'
+    )
+    .on('error', function(err) {
+      console.log('Error: ' + err.message);
+    })
+    .save(__dirname + 'EEEAAA.mp4');
 
-  fn({host:mp4url, id:id, url:mp4url+id});
+  fn();
 
 };
