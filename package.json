@@ -28,7 +28,7 @@
     "delegate-dom": "0.0.1",
     "electron-debug": "^0.1.0",
     "electron-packager": "^5.1.0",
-    "electron-prebuilt": "^1.1.1",
+    "electron-prebuilt": "^1.2.7",
     "exorcist": "^0.4.0",
     "express": "^4.12.4",
     "htmlparser2": "^3.8.3",
@@ -50,7 +50,7 @@
     "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
     "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
     "build:web": "npm run build-css && npm run build-js",
-    "package": "electron-packager ./ $npm_package_productName-$npm_package_version --platform=linux --arch=x64 --version=1.2.1 --ignore='node_modules/(electron-packager|electron-prebuilt|electron-debug|babelify|browserify|browserify-incremental|cssnext|exorcist|beefy|http-server|postcss-cli|postcss-nested|semantic-ui-css|silence-chromium|browser-request|express|body-parser)'"
+    "package": "electron-packager ./ $npm_package_productName-$npm_package_version --platform=linux --arch=x64 --version=1.2.7 --ignore='node_modules/(electron-packager|electron-prebuilt|electron-debug|babelify|browserify|browserify-incremental|cssnext|exorcist|beefy|http-server|postcss-cli|postcss-nested|semantic-ui-css|silence-chromium|browser-request|express|body-parser)'"
   },
   "config": {}
 }
