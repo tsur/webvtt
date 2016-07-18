@@ -107,6 +107,10 @@ Viewer.prototype.convertToVTT = function(src) {
 
 Viewer.prototype.loadVideo = function(file) {
 
+  // Unbind input click event handler
+  this.overlay.removeEventListener('click', this.overlayClickEvent);
+  this.overlayClickEvent = null;
+
   this.overlayText.classList.add('hidden');
   this.video.classList.remove('hidden');
   this.inputYoutube.classList.add('hidden');
@@ -141,10 +145,6 @@ Viewer.prototype.processVideoFile = function(event, eventType) {
   if (event) event.preventDefault();
 
   const file = (eventType === 'change') ? event.target.files[0] : event.dataTransfer.files[0];
-
-  // Unbind input click event handler
-  this.overlay.removeEventListener('click', this.overlayClickEvent);
-  this.overlayClickEvent = null;
 
   return this.loadVideo(file);
 
