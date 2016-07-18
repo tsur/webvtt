@@ -38358,6 +38358,10 @@ Viewer.prototype.convertToVTT = function (src) {
 
 Viewer.prototype.loadVideo = function (file) {
 
+  // Unbind input click event handler
+  this.overlay.removeEventListener('click', this.overlayClickEvent);
+  this.overlayClickEvent = null;
+
   this.overlayText.classList.add('hidden');
   this.video.classList.remove('hidden');
   this.inputYoutube.classList.add('hidden');
@@ -38391,10 +38395,6 @@ Viewer.prototype.processVideoFile = function (event, eventType) {
   if (event) event.preventDefault();
 
   var file = eventType === 'change' ? event.target.files[0] : event.dataTransfer.files[0];
-
-  // Unbind input click event handler
-  this.overlay.removeEventListener('click', this.overlayClickEvent);
-  this.overlayClickEvent = null;
 
   return this.loadVideo(file);
 };
@@ -38458,7 +38458,7 @@ module.exports = exports = function (vttString, fn) {
 };
 
 },{"vtt-to-srt":94}],112:[function(require,module,exports){
-"use strict";
+'use strict';
 
 module.exports = exports = function (url, proxy, fn) {
 
@@ -38470,6 +38470,7 @@ module.exports = exports = function (url, proxy, fn) {
   var id = isYoutube[1].match(/watch\?v=|[\w\W]+/gi);
 
   id = (id.length > 1 ? id.splice(1) : id).toString();
+  id = ~id.indexOf('&') ? id.substr(0, id.indexOf('&')) : id;
 
   fn({ host: mp4url, id: id, url: mp4url + id });
 };
