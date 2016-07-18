@@ -21,11 +21,11 @@ function Desktop() {
   if (!(this instanceof Desktop)) return new Desktop();
 
   // clear notifications on focus. TODO: only clear notifications in current channel when we have that
-  currentWindow.on('focus', function() {
+  //currentWindow.on('focus', function() {
 
     // self.setBadge(false);
 
-  });
+  //});
 
   this.on('openUrl', function(url) {
 

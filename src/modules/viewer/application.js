@@ -46,20 +46,20 @@ Viewer.prototype.initViewer = function() {
   this.inputYoutube = document.querySelector('.overlay input.youtube');
   this.video = document.querySelector('.overlay video');
   this.overlay = document.querySelector('.overlay');
-  this.exportBtn = document.querySelector('.export');
+  this.exportStrBtn = document.querySelector('.export-str');
+  this.exportVttBtn = document.querySelector('.export-vtt');
 
   this.video.setAttribute('crossorigin', 'anonymous');
 
-  const overlayClickEvent = event => {
-
-    this.overlay.removeEventListener('click', overlayClickEvent);
+  this.overlayClickEvent = event => {
 
     if (event.target.tagName.toLowerCase() != 'input') this.input.click();
 
   };
 
-  this.overlay.addEventListener('click', overlayClickEvent);
-  this.exportBtn.addEventListener('click', event => this.download());
+  this.overlay.addEventListener('click', this.overlayClickEvent);
+  this.exportStrBtn.addEventListener('click', event => this.downloadSrt());
+  this.exportVttBtn.addEventListener('click', event => this.downloadVtt());
 
   this.input.addEventListener('change', (e) => this.processVideoFile(e, 'change'));
 
@@ -90,6 +90,8 @@ Viewer.prototype.initViewer = function() {
 
 Viewer.prototype.addSubtitles = function(text) {
 
+  if(!this.player) return;
+
   this.player.captions(this.convertToVTT(text || this.app.views.editor.getText()));
 
 };
@@ -108,13 +110,14 @@ Viewer.prototype.loadVideo = function(file) {
   this.overlayText.classList.add('hidden');
   this.video.classList.remove('hidden');
   this.inputYoutube.classList.add('hidden');
-  this.player = plyr.setup(this.overlay, {captions:{defaultActive: true}})[0];
+
+  const player = plyr.setup(this.overlay, {captions:{defaultActive: true}})[0];
 
   const videoType = file.type ? file.type : 'video/mp4';
   const src = file.url ? {src: file.id, type: 'youtube'} : {src: window.URL.createObjectURL(file), type: videoType};
   //const src = file.url ? {src: file.url, type: videoType} : {src: window.URL.createObjectURL(file), type: videoType};
 
-  this.player.source({
+  player.source({
     type:       'video',
     title:      'Example title',
     sources: [src],
@@ -127,6 +130,10 @@ Viewer.prototype.loadVideo = function(file) {
     }]
   });
 
+  this.app.views.editor.setPlayer(player);
+
+  this.player = player;
+
 };
 
 Viewer.prototype.processVideoFile = function(event, eventType) {
@@ -135,11 +142,15 @@ Viewer.prototype.processVideoFile = function(event, eventType) {
 
   const file = (eventType === 'change') ? event.target.files[0] : event.dataTransfer.files[0];
 
+  // Unbind input click event handler
+  this.overlay.removeEventListener('click', this.overlayClickEvent);
+  this.overlayClickEvent = null;
+
   return this.loadVideo(file);
 
 };
 
-Viewer.prototype.download = function() {
+Viewer.prototype.downloadSrt = function() {
 
   exportVideo(this.app.views.editor.getText(), srt => {
 
@@ -154,12 +165,54 @@ Viewer.prototype.download = function() {
 
 };
 
+Viewer.prototype.downloadVtt = function() {
+
+  const link = document.createElement('a');
+
+  link.download = "subtitles.vtt";
+  link.href = "data:text/plain,"+encodeURIComponent(this.app.views.editor.getText());
+
+  link.click();
+
+};
+
 Viewer.prototype.render = function() {
 
   this.app.on('rendered', () => this.initViewer());
 
   return h('div', [
-      h('.export', [h('img.icon', {src: './export.svg'})]),
+      h('.modalbg', {id: 'openModal'}, h('.dialog', [
+        h('a.close', {title: 'Close', href: '#close'}, '×'),
+        h('h2', 'WebVTT (v0.1.0)'),
+        h('p', 'This is an experiment for easily setting up subtitles to your videos on the fly. The idea came across after working on a personal project. I just wanted a quick and fast way to work with subtitles in my videos without having to install third party software for specific platforms and learning about them.'),
+        h('p', ['The idea was just to stay at the text editor the most of the time. For that, you may use the provided ',
+                h('span.shortcuts', [
+                  'shortcuts',
+                  h('div.shorcuts-help', [
+                    h('p', [h('strong', '<Alt-SPACE>'), ' for toggling between Pausing/Resuming']),
+                    h('p', [h('strong', '<Alt-F>'), ' for toggling between Full/Normal screen size']),
+                    h('p', [h('strong', '<Alt-C>'), ' for toggling between Enabling/Disabling captions']),
+                    h('p', [h('strong', '<Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']),
+                    h('p', [h('strong', '<Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']),
+                    h('p', [h('strong', '<Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']),
+                    h('p', [h('strong', '<Ctrl-SPACE-tm>'), ' for including a time mark 00:00:00.000']),
+                    h('p', [h('strong', '<Ctrl-SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])
+                  ])
+                ]),
+                ' to control the video player anytime you stay on the text editor.',
+        ]),
+        h('p.fineprint', h('a', {target:"_blank", href:'https://github.com/Tsur/webvtt'}, 'Made with ♡ by Zuri Pabón'))
+      ])),
+      h('.export', {attributes: {"tabindex": "0"} }, [
+        h('img.icon', {src: './gear.svg'}),
+        h('div',
+            h('ul.gear-menu-content', [
+              h('li', h('button.export-vtt', 'Export as vtt')),
+              h('li', h('button.export-str', 'Export as str')),
+              h('li.separator'),
+              h('li', h('button.about', h('a', {href: "#openModal"}, 'About ...')))
+            ]))
+      ]),
       h('.overlay.plyr', [
         h('input.file', {
           type: 'file'

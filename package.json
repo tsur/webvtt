@@ -1,7 +1,7 @@
 {
   "name": "subcss",
   "productName": "subcss",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Set subtitle to your videos by just using CSS",
   "homepage": "https://http://tsur.github.io/subcss",
   "private": true,
@@ -15,9 +15,7 @@
   "engines": {
     "node": ">=0.10.0"
   },
-  "dependencies": {
-    "request": "^2.57.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel": "^5.5.4",
     "babelify": "^6.1.1",
@@ -43,12 +41,12 @@
   },
   "watch": {},
   "scripts": {
-    "start": "npm run start:tubeproxy",
+    "//start": "npm run start:tubeproxy",
     "start:desktop": "electron electron.js 2>&1 | silence-chromium",
-    "start:web": "node src/node/server.js",
-    "start:tubeproxy": "node src/node/proxy.js",
+    "//start:web": "node src/node/server.js",
+    "//start:tubeproxy": "node src/node/proxy.js",
     "deploy:gh-pages": "git checkout gh-pages && git merge --no-ff develop -m 'Merged develop into gh-pages' && git push origin gh-pages && git checkout develop",
-    "deploy:heroku": "git checkout master && git merge --no-ff develop -m 'Merged into develop' && git push origin master && git push heroku master && git checkout develop",
+    "//deploy:heroku": "git checkout master && git merge --no-ff develop -m 'Merged into develop' && git push origin master && git push heroku master && git checkout develop",
     "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
     "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
     "build:web": "npm run build-css && npm run build-js",
