@@ -8,6 +8,7 @@ module.exports = exports = function(url, proxy, fn) {
   var id = isYoutube[1].match(/watch\?v=|[\w\W]+/gi);
 
   id = ((id.length > 1) ? id.splice(1) : id).toString();
+  id = ~id.indexOf('&') ? id.substr(0, id.indexOf('&')) : id;
 
   fn({host:mp4url, id:id, url:mp4url+id});
 
