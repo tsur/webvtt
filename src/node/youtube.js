@@ -9,6 +9,6 @@ module.exports = exports = function(url, proxy, fn) {
 
   id = ((id.length > 1) ? id.splice(1) : id).toString();
 
-  fn(mp4url + id);
+  fn({host:mp4url, id:id, url:mp4url+id});
 
 };

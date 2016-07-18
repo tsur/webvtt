@@ -49,8 +49,8 @@
   width: 100%;
   height: 100%;
 }
-#ui-sub .overlay {position:absolute;margin: 40px;width: calc(100% - 80px);height: calc(100% - 80px);text-align: center;display: block;background-color: #272822;border: 1px solid #272822;box-shadow: 0 10px 10px #000;}
-#ui-sub .overlay p {/* text-align: center; */color: rgba(255, 255, 255, 0.1);text-shadow: -1px -1px rgba(150, 150, 150, 0.1);text-rendering: optimizeLegibility;cursor: pointer;font-size: 30px;/* display: block; */position: relative;top: 280px;-webkit-transform: (-50%, -50%);transform: (-50%, -50%);}
+#ui-sub .overlay {z-index: 10;position:absolute;margin: 40px;width: calc(100% - 80px);height: calc(100% - 80px);text-align: center;display: block;background-color: #272822;border: 1px solid #272822;box-shadow: 0 10px 10px #000;cursor:pointer;}
+#ui-sub .overlay p {/* text-align: center; */color: rgba(255, 255, 255, 0.1);text-shadow: -1px -1px rgba(150, 150, 150, 0.1);text-rendering: optimizeLegibility;cursor: pointer;font-size: 30px;/* display: block; */position: relative;top: 260px;-webkit-transform: (-50%, -50%);transform: (-50%, -50%);}
 #ui-sub .overlay p.hidden{display:none;}
 #ui-sub .overlay .file {position:absolute;top:-100px;left:0;width:1px;height:1px;}
 #ui-sub .overlay .youtube{padding: 15px;font-size: 20px;outline: none;color: rgba(255, 255, 255, 0.1);background-color: #272822;border: 3px solid #202020;width: 300px;height: 40px;z-index: 1000;position:absolute;top:50%;left:50%;-webkit-transform: translate(-50%, 70%);transform: translate(-50%, 70%);}
@@ -59,6 +59,27 @@
 #ui-sub .overlay .youtube::-moz-placeholder {/* Firefox 19+ */color: rgba(255, 255, 255, 0.1);text-align: center;}
 #ui-sub .overlay .youtube:-ms-input-placeholder {color: rgba(255, 255, 255, 0.1);text-align: center;}
 #ui-sub .overlay video {overflow: hidden;width:100%;/*height:100%;*/}
-#ui-sub .export {position: absolute;background-color: #272822;width: 15px;height: 15px;text-align: center;top: 10px;cursor: pointer;padding: 5px;}
+#ui-sub .export {position: absolute;outline: 0;/* background-color: #272822; */top: 10px;right: 10px;width: 20px;height: 20px;text-align: center;top: 5px;cursor: pointer;padding: 5px;color: white;}
 #ui-sub .export .icon {width: 15px;height: 15px;}
-#ui-sub .export .icon:hover path {fill: white;}
+#ui-sub .export:focus {/* clicking on label should toggle the menu */pointer-events: none;}
+#ui-sub .export:focus .gear-menu-content {/*  opacity is 1 in opened state (see below) */opacity: 1;visibility: visible;/* don't let pointer-events affect descendant elements */pointer-events: auto;}
+#ui-sub .gear-menu-content {background-color: #272822;cursor: default;width: auto;margin-top: 10px;text-align: left;padding: 10px;list-style: none;position: absolute;z-index: 100;right: -5px;opacity: 0;visibility: hidden;-webkit-transition: visibility 0.5s;transition: visibility 0.5s;border: 1px solid #6b6b6b;}
+#ui-sub .gear-menu-content li {color: #f2f5e9;list-style-type: none;white-space: nowrap;padding-top: 2px;color: rgba(255, 255, 255, 0.4);text-shadow: -1px -1px rgba(150, 150, 150, 0.1);text-rendering: optimizeLegibility;}
+#ui-sub .gear-menu-content li.separator {margin: 5px;border-bottom: 1px dotted grey;}
+#ui-sub .gear-menu-content a, #ui-sub .gear-menu-content button {background: transparent;border: none;color: inherit;cursor: inherit;outline: 0;cursor: pointer;font-size: 12px;}
+#ui-sub .gear-menu-content a {text-decoration: none;}
+#ui-sub .gear-menu-content:before {content: "";width: 0;height: 0;border-bottom: 10px solid #6b6b6b;border-left: 10px solid transparent;border-right: 10px solid transparent;position: absolute;top: -10px;right: 10px;}
+#ui-sub .modalbg {position: fixed;font-family: Arial, Helvetica, sans-serif;top: 0;right: 0;bottom: 0;left: 0;background: rgba(0, 0, 0, 0);z-index: 99999;-webkit-transition: all 0.5s ease-out;transition: all 0.5s ease-out;-webkit-transition-delay: 0.2s;-moz-transition-delay: 0.2s;-o-transition-delay: 0.2s;-transition-delay: 0.2s;display: block;pointer-events: none;}
+#ui-sub .modalbg .dialog {width: 500px;position: relative;top: -1000px;margin: 10% auto;padding: 5px 20px 13px 20px;border-radius: 10px;background: #272822;box-shadow: 0 0 10px #000;-moz-box-shadow: 0 0 10px #000;-webkit-box-shadow: 0 0 10px #000;color: #6b6b6b;line-height: 1.4em;}
+#ui-sub .modalbg .dialog .ie7 {filter: progid:DXImageTransform.Microsoft.Shadow(color='#000', Direction=135, Strength=3);}
+#ui-sub .modalbg .dialog h2, #ui-sub .modalbg .dialog .shortcuts{color:#6B6B7C;}
+#ui-sub .modalbg .dialog .shortcuts:hover{border-bottom: 1px dotted #6B6B7C;cursor: help;}
+#ui-sub .modalbg .dialog .shortcuts:hover{border-bottom: 1px dotted #6B6B7C;cursor: help;}
+#ui-sub .modalbg .dialog .shortcuts:hover .shorcuts-help{display: block;position: absolute;font-size: 11px;line-height: 0.9em;border: 1px solid #6b6b6b;background-color: #222;padding: 10px;border-radius: 10px;top: 20px;right: 30px;font-weight: lighter;}
+#ui-sub .modalbg .dialog .shorcuts-help{display:none;}
+#ui-sub .modalbg:target {display: block;pointer-events: auto;background: rgba(0, 0, 0, 0.4);-webkit-transition: all 0.8s ease-out;transition: all 0.8s ease-out;}
+#ui-sub .modalbg:target .dialog {top: -20px;-webkit-transition: all 0.8s ease-out;transition: all 0.8s ease-out;-webkit-transition-delay: 0.2s;-moz-transition-delay: 0.2s;-o-transition-delay: 0.2s;-transition-delay: 0.2s;}
+#ui-sub .close {background: #272822;color: #6b6b6b;line-height: 25px;position: absolute;right: -12px;text-align: center;top: -10px;width: 24px;text-decoration: none;font-weight: bold;border-radius: 12px;box-shadow: 0 0 10px #000;-moz-box-shadow: 0 0 10px #000;-webkit-box-shadow: 0 0 10px #000;-webkit-transition: all 0.2s ease-out;transition: all 0.2s ease-out;-webkit-transition-delay: 0.2s;-moz-transition-delay: 0.2s;-o-transition-delay: 0.2s;-transition-delay: 0.2s;}
+#ui-sub .close .ie7 {filter: progid:DXImageTransform.Microsoft.Shadow(color='#000', Direction=135, Strength=3);}
+#ui-sub .close:hover {background: #6b6b6b;color:#272822;-webkit-transition: all 0.5s ease-out;transition: all 0.5s ease-out;}
+#ui-sub .fineprint a {font-size: 12px;color: #6B6B7C;text-decoration: none;}

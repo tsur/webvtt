@@ -15,7 +15,10 @@ import {
 }
 from 'virtual-dom';
 
+import plyr from 'plyr';
+
 import getYoutube from '../../node/youtube';
+import exportVideo from '../../node/export_video';
 
 inherits(Viewer, EventEmitter);
 
@@ -38,20 +41,25 @@ Viewer.prototype.initViewer = function() {
 
   };
 
-  this.overlayText = document.querySelector('.overlay p')
+  this.overlayText = document.querySelector('.overlay p');
   this.input = document.querySelector('.overlay input.file');
   this.inputYoutube = document.querySelector('.overlay input.youtube');
   this.video = document.querySelector('.overlay video');
   this.overlay = document.querySelector('.overlay');
-  this.videoSource = document.querySelector('#ui-video-source');
+  this.exportStrBtn = document.querySelector('.export-str');
+  this.exportVttBtn = document.querySelector('.export-vtt');
 
   this.video.setAttribute('crossorigin', 'anonymous');
 
-  this.overlay.addEventListener('click', (e) => {
+  this.overlayClickEvent = event => {
 
-    if (e.target.tagName.toLowerCase() != 'input') this.input.click();
+    if (event.target.tagName.toLowerCase() != 'input') this.input.click();
 
-  });
+  };
+
+  this.overlay.addEventListener('click', this.overlayClickEvent);
+  this.exportStrBtn.addEventListener('click', event => this.downloadSrt());
+  this.exportVttBtn.addEventListener('click', event => this.downloadVtt());
 
   this.input.addEventListener('change', (e) => this.processVideoFile(e, 'change'));
 
@@ -59,18 +67,10 @@ Viewer.prototype.initViewer = function() {
 
     if (e.keyCode === 13 || e.which === 13) {
 
-      getYoutube(this.inputYoutube.value, this.proxyUrl, (url) => {
-
-        if (url) this.loadVideo({
-          data: url
-        });
-
-      });
+      getYoutube(this.inputYoutube.value, this.proxyUrl, tube => this.loadVideo(tube));
     }
 
   });
-
-  this.video.addEventListener('playing', () => this.addSubtitles());
 
   this.app.on('updatedVTT', (text) => this.addSubtitles(text));
 
@@ -90,16 +90,9 @@ Viewer.prototype.initViewer = function() {
 
 Viewer.prototype.addSubtitles = function(text) {
 
-  // Remove all track elements
-  if (this.track) this.track.remove();
+  if(!this.player) return;
 
-  this.track = document.createElement('track');
-
-  this.track.setAttribute('src', this.convertToVTT(text || this.app.views.editor.getText()));
-  this.track.setAttribute('srclang', 'en');
-  this.track.setAttribute('default', true);
-
-  this.video.appendChild(this.track);
+  this.player.captions(this.convertToVTT(text || this.app.views.editor.getText()));
 
 };
 
@@ -114,71 +107,126 @@ Viewer.prototype.convertToVTT = function(src) {
 
 Viewer.prototype.loadVideo = function(file) {
 
-  if (file.type) this.videoSource.setAttribute('type', file.type);
-
-  this.videoSource.setAttribute('src', file.data);
-
   this.overlayText.classList.add('hidden');
-
-  // this.video.setAttribute('width', (window.innerWidth * 0.7) - 80);
-  // this.video.setAttribute('height', window.innerHeight - 80);
-
   this.video.classList.remove('hidden');
-
   this.inputYoutube.classList.add('hidden');
 
-  this.video.load();
-  // this.video.play();
+  const player = plyr.setup(this.overlay, {captions:{defaultActive: true}})[0];
+
+  const videoType = file.type ? file.type : 'video/mp4';
+  const src = file.url ? {src: file.id, type: 'youtube'} : {src: window.URL.createObjectURL(file), type: videoType};
+  //const src = file.url ? {src: file.url, type: videoType} : {src: window.URL.createObjectURL(file), type: videoType};
+
+  player.source({
+    type:       'video',
+    title:      'Example title',
+    sources: [src],
+    tracks:     [{
+      kind:   'captions',
+      label:  'English',
+      srclang:'en',
+      src:    this.convertToVTT(this.app.views.editor.getText()),
+      default: true
+    }]
+  });
+
+  this.app.views.editor.setPlayer(player);
+
+  this.player = player;
 
 };
 
 Viewer.prototype.processVideoFile = function(event, eventType) {
 
-  let file, name, reader, size, type;
-  let self = this;
-
   if (event) event.preventDefault();
 
-  file = (eventType === 'change') ? event.target.files[0] : event.dataTransfer.files[0];
-  name = file.name;
-  type = file.type;
-  size = file.size;
+  const file = (eventType === 'change') ? event.target.files[0] : event.dataTransfer.files[0];
 
-  reader = new FileReader();
+  // Unbind input click event handler
+  this.overlay.removeEventListener('click', this.overlayClickEvent);
+  this.overlayClickEvent = null;
 
-  reader.onload = (event) => {
-
-    const file = {
-
-      'data': event.target.result,
-      'name': name,
-      'size': size,
-      'type': type
-
-    };
-
-    this.loadVideo(file);
-
-  };
-
-  reader.readAsDataURL(file);
-
-  return false;
+  return this.loadVideo(file);
 
 };
 
-Viewer.prototype.render = function(model) {
+Viewer.prototype.downloadSrt = function() {
+
+  exportVideo(this.app.views.editor.getText(), srt => {
+
+    const link = document.createElement('a');
+
+    link.download = "subtitles.srt";
+    link.href = "data:text/plain,"+encodeURIComponent(srt);
+
+    link.click();
+
+  });
+
+};
+
+Viewer.prototype.downloadVtt = function() {
+
+  const link = document.createElement('a');
+
+  link.download = "subtitles.vtt";
+  link.href = "data:text/plain,"+encodeURIComponent(this.app.views.editor.getText());
+
+  link.click();
+
+};
+
+Viewer.prototype.render = function() {
 
   this.app.on('rendered', () => this.initViewer());
 
-  return h('.overlay', [h('input.file', {
-    type: 'file'
-  }), h('p', 'DROP YOUR TUBE HERE'), h('input.youtube', {
-    type: 'text',
-    placeholder: 'Type your tube'
-  }), h('video.hidden', {
-    controls: true
-  }, [h('source#ui-video-source')])]);
+  return h('div', [
+      h('.modalbg', {id: 'openModal'}, h('.dialog', [
+        h('a.close', {title: 'Close', href: '#close'}, '×'),
+        h('h2', 'WebVTT (v0.1.0)'),
+        h('p', 'This is an experiment for easily setting up subtitles to your videos on the fly. The idea came across after working on a personal project. I just wanted a quick and fast way to work with subtitles in my videos without having to install third party software for specific platforms and learning about them.'),
+        h('p', ['The idea was just to stay at the text editor the most of the time. For that, you may use the provided ',
+                h('span.shortcuts', [
+                  'shortcuts',
+                  h('div.shorcuts-help', [
+                    h('p', [h('strong', '<Alt-SPACE>'), ' for toggling between Pausing/Resuming']),
+                    h('p', [h('strong', '<Alt-F>'), ' for toggling between Full/Normal screen size']),
+                    h('p', [h('strong', '<Alt-C>'), ' for toggling between Enabling/Disabling captions']),
+                    h('p', [h('strong', '<Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']),
+                    h('p', [h('strong', '<Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']),
+                    h('p', [h('strong', '<Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']),
+                    h('p', [h('strong', '<Ctrl-SPACE-tm>'), ' for including a time mark 00:00:00.000']),
+                    h('p', [h('strong', '<Ctrl-SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])
+                  ])
+                ]),
+                ' to control the video player anytime you stay on the text editor.',
+        ]),
+        h('p.fineprint', h('a', {target:"_blank", href:'https://github.com/Tsur/webvtt'}, 'Made with ♡ by Zuri Pabón'))
+      ])),
+      h('.export', {attributes: {"tabindex": "0"} }, [
+        h('img.icon', {src: './gear.svg'}),
+        h('div',
+            h('ul.gear-menu-content', [
+              h('li', h('button.export-vtt', 'Export as vtt')),
+              h('li', h('button.export-str', 'Export as str')),
+              h('li.separator'),
+              h('li', h('button.about', h('a', {href: "#openModal"}, 'About ...')))
+            ]))
+      ]),
+      h('.overlay.plyr', [
+        h('input.file', {
+          type: 'file'
+        }),
+        h('p', 'DROP YOUR TUBE HERE'),
+        h('input.youtube', {
+          type: 'text',
+          placeholder: 'Type your tube'
+        }),
+        h('video.hidden', {
+          controls: true
+        }, [h('source#ui-video-source')])
+      ])
+    ]);
 
 };
 

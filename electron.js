@@ -1,8 +1,8 @@
 /*****************************************************
- _______           ______   _______  _______  _______ 
+ _______           ______   _______  _______  _______
 (  ____ \|\     /|(  ___ \ (  ____ \(  ____ \(  ____ \
 | (    \/| )   ( || (   ) )| (    \/| (    \/| (    \/
-| (_____ | |   | || (__/ / | |      | (_____ | (_____ 
+| (_____ | |   | || (__/ / | |      | (_____ | (_____
 (_____  )| |   | ||  __ (  | |      (_____  )(_____  )
       ) || |   | || (  \ \ | |            ) |      ) |
 /\____) || (___) || )___) )| (____/\/\____) |/\____) |
@@ -14,12 +14,12 @@
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
-var app = require('app'); // Module to control application life.
-var BrowserWindow = require('browser-window'); // Module to create native browser window.
+const {app} = require('electron'); // Module to control application life.
+const {BrowserWindow} = require('electron'); // Module to create native browser window.
 var path = require('path');
 
 var mainWindow = null;
-var appName = 'SubCSS';
+var appName = 'WebVTT';
 var index = 'file://' + path.join(__dirname, 'index.html')
 
 // Report crashes to our server.
@@ -51,7 +51,7 @@ function appReady() {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadUrl(index);
+  mainWindow.loadURL(index);
 
   // Open the devtools.
   mainWindow.openDevTools();
