@@ -38,6 +38,8 @@ Editor.prototype.render = function(model) {
 
     this.ace = editor.getSession().getDocument();
 
+    this.editor = editor;
+
     this.setCommands(editor);
 
   });
@@ -54,7 +56,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "togglePlay",
-      bindKey: bindKey("Alt-SPACE", "Alt-SPACE"),
+      bindKey: bindKey("Ctrl-Alt-SPACE", "Ctrl-Alt-SPACE"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -68,7 +70,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "toggleFullscreen",
-      bindKey: bindKey("Alt-F", "Alt-F"),
+      bindKey: bindKey("Ctrl-Alt-F", "Ctrl-Alt-F"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -82,7 +84,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "toggleCaptions",
-      bindKey: bindKey("Alt-C", "Alt-C"),
+      bindKey: bindKey("Ctrl-Alt-C", "Ctrl-Alt-C"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -96,84 +98,84 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "forward 1 second",
-      bindKey: bindKey("Alt-Q", "Alt-Q"),
+      bindKey: bindKey("Ctrl-Alt-Q", "Ctrl-Alt-Q"),
       exec: editor => {
 
           const player = this.ace.player;
 
           if(!player) return;
 
-          player.forward(1);
+          player.embed ? player.seek(parseInt(player.media.currentTime)+1) : player.forward(1);
 
       }
   });
 
   editor.commands.addCommand({
       name: "rewind 1 second",
-      bindKey: bindKey("Alt-Shitf-Q", "Alt-Shift-Q"),
+      bindKey: bindKey("Ctrl-Alt-Shitf-Q", "Ctrl-Alt-Shift-Q"),
       exec: editor => {
 
           const player = this.ace.player;
 
           if(!player) return;
 
-          player.rewind(1);
+          player.embed ? player.seek(parseInt(player.media.currentTime)-1) : player.rewind(1);
 
       }
   });
 
   editor.commands.addCommand({
       name: "forward 10 seconds",
-      bindKey: bindKey("Alt-W", "Alt-W"),
+      bindKey: bindKey("Ctrl-Alt-W", "Ctrl-Alt-W"),
       exec: editor => {
 
           const player = this.ace.player;
 
           if(!player) return;
 
-          player.forward(10);
+        player.embed ? player.seek(parseInt(player.media.currentTime)+10) : player.forward(10);
 
       }
   });
 
   editor.commands.addCommand({
       name: "rewind 10 seconds",
-      bindKey: bindKey("Alt-Shitf-W", "Alt-Shift-W"),
+      bindKey: bindKey("Ctrl-Alt-Shitf-W", "Ctrl-Alt-Shift-W"),
       exec: editor => {
 
           const player = this.ace.player;
 
           if(!player) return;
 
-          player.rewind(10);
+        player.embed ? player.seek(parseInt(player.media.currentTime)-10) : player.rewind(10);
 
       }
   });
 
   editor.commands.addCommand({
       name: "forward 60 seconds",
-      bindKey: bindKey("Alt-E", "Alt-E"),
+      bindKey: bindKey("Ctrl-Alt-E", "Ctrl-Alt-E"),
       exec: editor => {
 
           const player = this.ace.player;
 
           if(!player) return;
 
-          player.forward(60);
+          player.embed ? player.seek(parseInt(player.media.currentTime)+60) : player.forward(60);
 
       }
   });
 
   editor.commands.addCommand({
       name: "rewind 60 seconds",
-      bindKey: bindKey("Alt-Shitf-E", "Alt-Shift-E"),
+      bindKey: bindKey("Ctrl-Alt-Shitf-E", "Ctrl-Alt-Shift-E"),
       exec: editor => {
 
           const player = this.ace.player;
 
           if(!player) return;
 
-          player.rewind(60);
+          player.embed ? player.seek(parseInt(player.media.currentTime)-60) : player.rewind(60);
 
       }
   });
@@ -189,6 +191,12 @@ Editor.prototype.getText = function(model) {
 Editor.prototype.setPlayer = function(player) {
 
   this.ace.player = player;
+
+};
+
+Editor.prototype.setFocus = function() {
+
+  this.editor.focus();
 
 };
 
