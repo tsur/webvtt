@@ -35,6 +35,12 @@
 
 		}
 
+    .plyr__captions{
+
+      z-index: 100;
+
+    }
+
 		.file {
 
 			position:absolute;
@@ -93,6 +99,20 @@
 		}
 
 	}
+
+  .overlay-loading {
+
+    z-index: 10;
+    position: absolute;
+    margin: 40px;
+    width: calc(100% - 80px);
+    height: calc(100% - 80px);
+    text-align: center;
+    display: block;
+    background-color: #272822;
+    border: 1px solid #272822;
+    box-shadow: 0 10px 10px #000;
+  }
 
   .export {
 
@@ -323,5 +343,31 @@
 			text-decoration: none;
 		}
 	}
+
+  .loading {
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    border: 0.25rem solid rgba(255, 255, 255, 0.2);
+    border-top-color: white;
+    -webkit-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+    border-style: double;
+    border-width: .5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .loading-warning {
+
+    color: #6b6b6b;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+  }
 
 }

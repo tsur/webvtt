@@ -15,7 +15,9 @@ import {
 }
 from 'virtual-dom';
 
+// Note: replace for next line in production once you get changes into plyr
 import plyr from 'plyr';
+//import plyr from '../../plyr';
 
 import getYoutube from '../../node/youtube';
 import exportVideo from '../../node/export_video';
@@ -46,6 +48,7 @@ Viewer.prototype.initViewer = function() {
   this.inputYoutube = document.querySelector('.overlay input.youtube');
   this.video = document.querySelector('.overlay video');
   this.overlay = document.querySelector('.overlay');
+  this.overlayLoading = document.querySelector('.overlay-loading');
   this.exportStrBtn = document.querySelector('.export-str');
   this.exportVttBtn = document.querySelector('.export-vtt');
 
@@ -68,6 +71,7 @@ Viewer.prototype.initViewer = function() {
     if (e.keyCode === 13 || e.which === 13) {
 
       getYoutube(this.inputYoutube.value, this.proxyUrl, tube => this.loadVideo(tube));
+
     }
 
   });
@@ -111,19 +115,15 @@ Viewer.prototype.loadVideo = function(file) {
   this.overlay.removeEventListener('click', this.overlayClickEvent);
   this.overlayClickEvent = null;
 
-  this.overlayText.classList.add('hidden');
-  this.video.classList.remove('hidden');
-  this.inputYoutube.classList.add('hidden');
-
   const player = plyr.setup(this.overlay, {captions:{defaultActive: true}})[0];
 
   const videoType = file.type ? file.type : 'video/mp4';
-  const src = file.url ? {src: file.id, type: 'youtube'} : {src: window.URL.createObjectURL(file), type: videoType};
+  const src = file.url ? {src: file.id, type: 'youtube-cap'} : {src: window.URL.createObjectURL(file), type: videoType};
   //const src = file.url ? {src: file.url, type: videoType} : {src: window.URL.createObjectURL(file), type: videoType};
 
   player.source({
     type:       'video',
-    title:      'Example title',
+    title:      'title',
     sources: [src],
     tracks:     [{
       kind:   'captions',
@@ -135,8 +135,33 @@ Viewer.prototype.loadVideo = function(file) {
   });
 
   this.app.views.editor.setPlayer(player);
-
   this.player = player;
+
+  if(src.type === 'youtube-cap'){
+
+    this.overlayLoading.classList.remove('hidden');
+    this.overlay.classList.add('hidden');
+    this.overlayText.classList.add('hidden');
+    this.video.classList.remove('hidden');
+    this.inputYoutube.classList.add('hidden');
+
+    // Set editor focus
+    return player.media.addEventListener('cap-mirror', event => {
+
+      this.app.views.editor.setFocus();
+      this.overlay.classList.remove('hidden');
+      this.overlayLoading.remove();
+
+    });
+
+  }
+
+  this.overlayText.classList.add('hidden');
+  this.video.classList.remove('hidden');
+  this.inputYoutube.classList.add('hidden');
+  this.overlayLoading.remove();
+
+  this.app.views.editor.setFocus();
 
 };
 
@@ -189,12 +214,12 @@ Viewer.prototype.render = function() {
                 h('span.shortcuts', [
                   'shortcuts',
                   h('div.shorcuts-help', [
-                    h('p', [h('strong', '<Alt-SPACE>'), ' for toggling between Pausing/Resuming']),
-                    h('p', [h('strong', '<Alt-F>'), ' for toggling between Full/Normal screen size']),
-                    h('p', [h('strong', '<Alt-C>'), ' for toggling between Enabling/Disabling captions']),
-                    h('p', [h('strong', '<Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']),
-                    h('p', [h('strong', '<Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']),
-                    h('p', [h('strong', '<Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']),
+                    h('p', [h('strong', '<Ctrl-Alt-SPACE>'), ' for toggling between Pausing/Resuming']),
+                    h('p', [h('strong', '<Ctrl-Alt-F>'), ' for toggling between Full/Normal screen size']),
+                    h('p', [h('strong', '<Ctrl-Alt-C>'), ' for toggling between Enabling/Disabling captions']),
+                    h('p', [h('strong', '<Ctrl-Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']),
+                    h('p', [h('strong', '<Ctrl-Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']),
+                    h('p', [h('strong', '<Ctrl-Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']),
                     h('p', [h('strong', '<Ctrl-SPACE-tm>'), ' for including a time mark 00:00:00.000']),
                     h('p', [h('strong', '<Ctrl-SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])
                   ])
@@ -225,7 +250,8 @@ Viewer.prototype.render = function() {
         h('video.hidden', {
           controls: true
         }, [h('source#ui-video-source')])
-      ])
+      ]),
+      h('.overlay-loading.hidden', [h('.loading'), h('p.loading-warning', 'This might take a while')])
     ]);
 
 };
