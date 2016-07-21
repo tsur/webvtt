@@ -111,6 +111,8 @@ Viewer.prototype.convertToVTT = function(src) {
 
 Viewer.prototype.loadVideo = function(file) {
 
+  if(!file) return;
+
   // Unbind input click event handler
   this.overlay.removeEventListener('click', this.overlayClickEvent);
   this.overlayClickEvent = null;

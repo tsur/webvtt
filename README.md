@@ -71,15 +71,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2016-07-17
 ### Added
 - Video player keyboard controls:
+    ```
     <Ctrl-Alt-SPACE> for toggling between Pausing/Resuming
     <Ctrl-Alt-F> for toggling between Full/Normal screen size
     <Ctrl-Alt-C> for toggling between Enabling/Disabling captions
     <Ctrl-Alt-Q>/<Alt-Shift-Q> for forwarding 1 sec back and forth
     <Ctrl-Alt-W>/<Alt-Shift-W> for forwarding 10 secs back and forth
     <Ctrl-Alt-E>/<Alt-Shift-E> for forwarding 1 min back and forth
+    ```
 - Custom snippets:
+    ```
     <Ctrl-SPACE-tm> for including a time mark 00:00:00.000
     <Ctrl-SPACE-tmf> for including a full time mark 00:00:00.000 --> 00:00:00.000
+    ```
 - Settings button with next features:
     export as vtt
     export as str
