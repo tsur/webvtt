@@ -1,16 +1,16 @@
 {
   "name": "subcss",
   "productName": "subcss",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Set subtitle to your videos by just using CSS",
-  "homepage": "https://http://tsur.github.io/subcss",
+  "homepage": "https://http://tsur.github.io/webvtt",
   "private": true,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tsur/subcss"
+    "url": "https://github.com/tsur/webvtt"
   },
-  "bugs": "https://github.com/tsur/subcss/issues",
+  "bugs": "https://github.com/tsur/webvtt/issues",
   "main": "./electron.js",
   "engines": {
     "node": ">=0.10.0"
@@ -26,29 +26,35 @@
     "browserify-incremental": "^3.0.0",
     "cssnext": "^1.4.0",
     "delegate-dom": "0.0.1",
-    "electron-debug": "^0.1.0",
+    "devtron": "^1.4.0",
+    "electron-debug": "^1.1.0",
     "electron-packager": "^5.1.0",
     "electron-prebuilt": "^1.2.7",
     "exorcist": "^0.4.0",
     "express": "^4.12.4",
+    "firebase": "^3.7.1",
     "htmlparser2": "^3.8.3",
     "http-server": "^0.8.0",
     "plyr": "^1.6.20",
     "postcss-cli": "^1.3.1",
     "postcss-nested": "^0.3.1",
     "silence-chromium": "^2.0.0",
-    "virtual-dom": "^2.0.1"
+    "virtual-dom": "^2.0.1",
+    "vtt-to-srt": "^0.1.0"
   },
   "watch": {},
   "scripts": {
     "//start": "npm run start:tubeproxy",
-    "start:desktop": "electron electron.js 2>&1 | silence-chromium",
+    "start:desktop-silence": "export NODE_ENV=DEV && electron electron.js 2>&1 | silence-chromium",
+    "start:desktop": "export NODE_ENV=DEV && electron electron.js",
     "//start:web": "node src/node/server.js",
     "//start:tubeproxy": "node src/node/proxy.js",
     "deploy:gh-pages": "git checkout gh-pages && git merge --no-ff develop -m 'Merged develop into gh-pages' && git push origin gh-pages && git checkout develop",
     "//deploy:heroku": "git checkout master && git merge --no-ff develop -m 'Merged into develop' && git push origin master && git push heroku master && git checkout develop",
     "build-css": "mkdir -p dist && cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-$npm_package_version.css",
+    "build-css:win": "cssnext --verbose styles/index.css | postcss --use postcss-nested --output dist/style-0.2.0.css",
     "build-js": "mkdir -p dist && browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-$npm_package_version.js.map > dist/bundle-$npm_package_version.js",
+    "build-js:win": "browserifyinc --debug --entry src/entry/web.js --transform babelify | exorcist dist/bundle-0.2.0.js.map > dist/bundle-0.2.0.js",
     "build:web": "npm run build-css && npm run build-js",
     "package": "electron-packager ./ $npm_package_productName-$npm_package_version --platform=linux --arch=x64 --version=1.2.7 --ignore='node_modules/(electron-packager|electron-prebuilt|electron-debug|babelify|browserify|browserify-incremental|cssnext|exorcist|beefy|http-server|postcss-cli|postcss-nested|semantic-ui-css|silence-chromium|browser-request|express|body-parser)'"
   },

@@ -15,9 +15,11 @@ import {
 }
 from 'virtual-dom';
 
+import * as firebase from 'firebase';
+
 // Note: replace for next line in production once you get changes into plyr
-import plyr from 'plyr';
-//import plyr from '../../plyr';
+// import plyr from 'plyr';
+import plyr from '../../plyr';
 
 import getYoutube from '../../node/youtube';
 import exportVideo from '../../node/export_video';
@@ -33,62 +35,92 @@ function Viewer(app, proxyUrl) {
 
 Viewer.prototype.initViewer = function() {
 
-  const processDragOverOrEnter = function(event) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyALlgfuOAu4pHx09H_ZEletYWyYqraTFwE",
+    authDomain: "webvtt-6b238.firebaseapp.com",
+    databaseURL: "https://webvtt-6b238.firebaseio.com",
+    storageBucket: "webvtt-6b238.appspot.com",
+    messagingSenderId: "121890160281"
+  });
 
-    if (event) event.preventDefault();
+  this.restore(data => {
 
-    event.dataTransfer.effectAllowed = 'copy';
+    const processDragOverOrEnter = function(event) {
 
-    return false;
+      if (event) event.preventDefault();
 
-  };
+      event.dataTransfer.effectAllowed = 'copy';
 
-  this.overlayText = document.querySelector('.overlay p');
-  this.input = document.querySelector('.overlay input.file');
-  this.inputYoutube = document.querySelector('.overlay input.youtube');
-  this.video = document.querySelector('.overlay video');
-  this.overlay = document.querySelector('.overlay');
-  this.overlayLoading = document.querySelector('.overlay-loading');
-  this.exportStrBtn = document.querySelector('.export-str');
-  this.exportVttBtn = document.querySelector('.export-vtt');
+      return false;
 
-  this.video.setAttribute('crossorigin', 'anonymous');
+    };
 
-  this.overlayClickEvent = event => {
+    this.overlayText = document.querySelector('.overlay p');
+    this.input = document.querySelector('.overlay input.file');
+    this.inputYoutube = document.querySelector('.overlay input.youtube');
+    this.video = document.querySelector('.overlay video');
+    this.overlay = document.querySelector('.overlay');
+    this.overlayLoading = document.querySelector('.overlay-loading');
+    this.exportStrBtn = document.querySelector('.export-str');
+    this.exportVttBtn = document.querySelector('.export-vtt');
+    this.shareBtn = document.querySelector('.share');
+    this.displayNotificationBox = document.querySelector('.notification');
 
-    if (event.target.tagName.toLowerCase() != 'input') this.input.click();
+    this.video.setAttribute('crossorigin', 'anonymous');
 
-  };
+    this.overlayClickEvent = event => {
 
-  this.overlay.addEventListener('click', this.overlayClickEvent);
-  this.exportStrBtn.addEventListener('click', event => this.downloadSrt());
-  this.exportVttBtn.addEventListener('click', event => this.downloadVtt());
+      if (event.target.tagName.toLowerCase() != 'input') this.input.click();
 
-  this.input.addEventListener('change', (e) => this.processVideoFile(e, 'change'));
+    };
 
-  this.inputYoutube.addEventListener('keyup', (e) => {
+    this.overlay.addEventListener('click', this.overlayClickEvent);
+    this.exportStrBtn.addEventListener('click', event => this.downloadSrt());
+    this.exportVttBtn.addEventListener('click', event => this.downloadVtt());
+    this.shareBtn.addEventListener('click', event => this.share());
+    this.displayNotificationBox.querySelector('span').addEventListener('click', event => event.target.parentElement.classList.add('hidden'));
+    this.displayNotificationBox.querySelector('.copy').addEventListener('click', event => {
+      this.displayNotificationBox.querySelector('textarea').select();
+      document.execCommand('copy');
+      event.stopPropagation();
+      event.preventDefault();
+      return false;
+    });
 
-    if (e.keyCode === 13 || e.which === 13) {
+    this.input.addEventListener('change', (e) => this.processVideoFile(e, 'change'));
 
-      getYoutube(this.inputYoutube.value, this.proxyUrl, tube => this.loadVideo(tube));
+    this.inputYoutube.addEventListener('keyup', (e) => {
 
+      if (e.keyCode === 13 || e.which === 13) {
+
+        getYoutube(this.inputYoutube.value, this.proxyUrl, tube => this.loadVideo(tube));
+
+      }
+
+    });
+
+    this.app.on('updatedVTT', (text) => this.addSubtitles(text));
+
+    this.overlay.addEventListener('drop', (e) => this.processVideoFile(e, 'drop'));
+
+    this.overlay.addEventListener('dragover', processDragOverOrEnter);
+
+    this.overlay.addEventListener('dragenter', processDragOverOrEnter);
+
+    document.addEventListener('drop', (e) => e.preventDefault());
+
+    document.addEventListener('dragover', (e) => e.preventDefault());
+
+    document.addEventListener('dragenter', (e) => e.preventDefault());
+
+    if(data){
+      // Load video ID
+      this.inputYoutube.value = data.v;
+      // Load text
+      this.app.views.editor.setText(data.s);
     }
 
   });
-
-  this.app.on('updatedVTT', (text) => this.addSubtitles(text));
-
-  this.overlay.addEventListener('drop', (e) => this.processVideoFile(e, 'drop'));
-
-  this.overlay.addEventListener('dragover', processDragOverOrEnter);
-
-  this.overlay.addEventListener('dragenter', processDragOverOrEnter);
-
-  document.addEventListener('drop', (e) => e.preventDefault());
-
-  document.addEventListener('dragover', (e) => e.preventDefault());
-
-  document.addEventListener('dragenter', (e) => e.preventDefault());
 
 };
 
@@ -146,6 +178,7 @@ Viewer.prototype.loadVideo = function(file) {
     this.overlayText.classList.add('hidden');
     this.video.classList.remove('hidden');
     this.inputYoutube.classList.add('hidden');
+    this.shareBtn.classList.remove('disabled');
 
     // Set editor focus
     return player.media.addEventListener('cap-mirror', event => {
@@ -192,6 +225,94 @@ Viewer.prototype.downloadSrt = function() {
 
 };
 
+Viewer.prototype.setUserID = function(id) {
+
+  this.userID = id;
+
+};
+
+Viewer.prototype.getUserID = function() {
+
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+
+  return `?${s4()}${s4()}${s4()}${s4()}${s4()}`;
+
+};
+
+Viewer.prototype.getVideoID = function() {
+
+  return this.inputYoutube.value;
+
+};
+
+Viewer.prototype.restore = function(cb) {
+
+  const possibleUserID = window.location.search;
+
+  if(!possibleUserID) return cb();
+
+  // read from firebase
+  this.restoreSubtitles(possibleUserID, (error, data) => {
+    if(error || !data.v) return;
+
+    // Set user id
+    this.setUserID(possibleUserID);
+
+    cb(data);
+  });
+
+};
+
+Viewer.prototype.displayNotification = function() {
+  const shareURL = `${window.location.hostname}${window.location.pathname}${this.userID}`;
+  this.displayNotificationBox.querySelector('textarea').innerHTML = shareURL;
+  this.displayNotificationBox.classList.remove('hidden');
+};
+
+Viewer.prototype.share = function() {
+
+  // Generate or retrieve ID
+  const id = this.userID || this.getUserID();
+  // Get Video ID
+  const video = this.getVideoID();
+  // Get text
+  const subtitles = this.app.views.editor.getText();
+
+  // Push to firebase
+  this.saveSubtitles(id, {v:video, s:subtitles}, (error, result) => {
+
+    if(error) return;
+
+    if(!this.userID) this.setUserID(id);
+
+    // Display Notification to user
+    this.displayNotification();
+  });
+
+};
+
+Viewer.prototype.saveSubtitles = function(id, data, cb) {
+  try{
+    firebase.database().ref('users/' + id).set(data).then(response => cb(null)).catch(error => cb(error));
+  }
+  catch(error){
+    cb(error);
+  }
+};
+
+Viewer.prototype.restoreSubtitles = function(id, cb) {
+  try{
+    firebase.database().ref('users/' + id).once('value').then(snapshot => cb(null, snapshot.val())).catch(error => cb(error));
+  }
+  catch(error){
+    cb(error);
+  }
+};
+
 Viewer.prototype.downloadVtt = function() {
 
   const link = document.createElement('a');
@@ -216,14 +337,14 @@ Viewer.prototype.render = function() {
                 h('span.shortcuts', [
                   'shortcuts',
                   h('div.shorcuts-help', [
-                    h('p', [h('strong', '<Ctrl-Alt-SPACE>'), ' for toggling between Pausing/Resuming']),
-                    h('p', [h('strong', '<Ctrl-Alt-F>'), ' for toggling between Full/Normal screen size']),
-                    h('p', [h('strong', '<Ctrl-Alt-C>'), ' for toggling between Enabling/Disabling captions']),
-                    h('p', [h('strong', '<Ctrl-Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']),
-                    h('p', [h('strong', '<Ctrl-Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']),
-                    h('p', [h('strong', '<Ctrl-Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']),
-                    h('p', [h('strong', '<Ctrl-SPACE-tm>'), ' for including a time mark 00:00:00.000']),
-                    h('p', [h('strong', '<Ctrl-SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])
+                    h('p', [h('strong', '<Alt-SPACE>'), ' for toggling between Pausing/Resuming']),
+                    h('p', [h('strong', '<Alt-F>'), ' for toggling between Full/Normal screen size']),
+                    h('p', [h('strong', '<Alt-C>'), ' for toggling between Enabling/Disabling captions']),
+                    h('p', [h('strong', '<Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']),
+                    h('p', [h('strong', '<Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']),
+                    h('p', [h('strong', '<Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']),
+                    h('p', [h('strong', '<SPACE-tm>'), ' for including a time mark 00:00:00.000']),
+                    h('p', [h('strong', '<SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])
                   ])
                 ]),
                 ' to control the video player anytime you stay on the text editor.',
@@ -236,6 +357,7 @@ Viewer.prototype.render = function() {
             h('ul.gear-menu-content', [
               h('li', h('button.export-vtt', 'Export as vtt')),
               h('li', h('button.export-str', 'Export as str')),
+              h('li', h('button.share.disabled', 'Save')),
               h('li.separator'),
               h('li', h('button.about', h('a', {href: "#openModal"}, 'About ...')))
             ]))
@@ -247,13 +369,15 @@ Viewer.prototype.render = function() {
         h('p', 'DROP YOUR TUBE HERE'),
         h('input.youtube', {
           type: 'text',
-          placeholder: 'Type your tube'
+          placeholder: 'Type your tube',
+          value: ''
         }),
         h('video.hidden', {
           controls: true
         }, [h('source#ui-video-source')])
       ]),
-      h('.overlay-loading.hidden', [h('.loading'), h('p.loading-warning', 'This might take a while')])
+      h('.overlay-loading.hidden', [h('.loading'), h('p.loading-warning', 'This might take a while')]),
+      h('.notification.hidden', [h('textarea'), h('span', '×'), h('p', ['Subtitles saved, ', h('a.copy', {href: ""}, 'Copy'), ' the link and share it!'])])
     ]);
 
 };

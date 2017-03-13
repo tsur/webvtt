@@ -14,8 +14,7 @@
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
-const {app} = require('electron'); // Module to control application life.
-const {BrowserWindow} = require('electron'); // Module to create native browser window.
+const {app, BrowserWindow} = require('electron'); // Module to control application life.
 var path = require('path');
 
 var mainWindow = null;
@@ -26,7 +25,8 @@ var index = 'file://' + path.join(__dirname, 'index.html')
 // require('crash-reporter').start();
 
 // Adds useful debug features
-// require('electron-debug')();
+if(process.env['NODE_ENV'] === 'DEV')
+  require('electron-debug')({showDevTools: true});
 
 // Quit when all windows are closed.
 app.on('ready', appReady);
