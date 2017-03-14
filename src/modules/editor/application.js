@@ -56,7 +56,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "togglePlay",
-      bindKey: bindKey("Ctrl-Alt-SPACE", "Ctrl-Alt-SPACE"),
+      bindKey: bindKey("Alt-SPACE", "Alt-SPACE"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -70,7 +70,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "toggleFullscreen",
-      bindKey: bindKey("Ctrl-Alt-F", "Ctrl-Alt-F"),
+      bindKey: bindKey("Alt-F", "Alt-F"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -84,7 +84,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "toggleCaptions",
-      bindKey: bindKey("Ctrl-Alt-C", "Ctrl-Alt-C"),
+      bindKey: bindKey("Alt-C", "Alt-C"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -98,7 +98,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "forward 1 second",
-      bindKey: bindKey("Ctrl-Alt-Q", "Ctrl-Alt-Q"),
+      bindKey: bindKey("Alt-Q", "Alt-Q"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -112,7 +112,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "rewind 1 second",
-      bindKey: bindKey("Ctrl-Alt-Shitf-Q", "Ctrl-Alt-Shift-Q"),
+      bindKey: bindKey("Alt-Shift-Q", "Alt-Shift-Q"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -126,7 +126,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "forward 10 seconds",
-      bindKey: bindKey("Ctrl-Alt-W", "Ctrl-Alt-W"),
+      bindKey: bindKey("Alt-W", "Alt-W"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -140,7 +140,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "rewind 10 seconds",
-      bindKey: bindKey("Ctrl-Alt-Shitf-W", "Ctrl-Alt-Shift-W"),
+      bindKey: bindKey("Alt-Shift-W", "Alt-Shift-W"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -154,7 +154,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "forward 60 seconds",
-      bindKey: bindKey("Ctrl-Alt-E", "Ctrl-Alt-E"),
+      bindKey: bindKey("Alt-E", "Alt-E"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -168,7 +168,7 @@ Editor.prototype.setCommands = function(editor) {
 
   editor.commands.addCommand({
       name: "rewind 60 seconds",
-      bindKey: bindKey("Ctrl-Alt-Shitf-E", "Ctrl-Alt-Shift-E"),
+      bindKey: bindKey("Alt-Shift-E", "Alt-Shift-E"),
       exec: editor => {
 
           const player = this.ace.player;
@@ -185,6 +185,12 @@ Editor.prototype.setCommands = function(editor) {
 Editor.prototype.getText = function(model) {
 
   return this.ace.getValue();
+
+};
+
+Editor.prototype.setText = function(text) {
+
+  return this.ace.setValue(text);
 
 };
 

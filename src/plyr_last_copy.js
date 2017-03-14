@@ -7,7 +7,7 @@
 // Credits: http://paypal.github.io/accessible-html5-video-player/
 // ==========================================================================
 
-// import Whammy from './whammy';
+import Whammy from './whammy';
 //var Whammy = require('../../whammy');
 
 ;(function(root, factory) {
@@ -1614,22 +1614,19 @@
                         plyr.mediaCapLoading = true;
                         //plyr.mediaCap.setAttribute('style', 'width:1px;height:1px;');
                         plyr.container.appendChild(plyr.mediaCap);
-                        // const video = new Whammy.Video();
-                        // const c = document.createElement("canvas");
-                        //
-                        // for(let i=0; i<plyr.media.duration; i++) video.add(c, 1000);
-                        // video.compile(undefined, output => {
-                        //
-                        //   plyr.mediaCap.src = window.URL.createObjectURL(output);
-                        //
-                        //   _triggerEvent(plyr.media, 'cap-mirror');
-                        //
-                        //   plyr.mediaCapLoading = false;
-                        //
-                        // });
-                        plyr.mediaCap.src = "./sample.mp4";
-                         _triggerEvent(plyr.media, 'cap-mirror');
-                         plyr.mediaCapLoading = false;
+                        const video = new Whammy.Video();
+                        const c = document.createElement("canvas");
+
+                        for(let i=0; i<plyr.media.duration; i++) video.add(c, 1000);
+                        video.compile(undefined, output => {
+
+                          plyr.mediaCap.src = window.URL.createObjectURL(output);
+
+                          _triggerEvent(plyr.media, 'cap-mirror');
+
+                          plyr.mediaCapLoading = false;
+
+                        });
 
                     },
                     'onStateChange': function(event) {

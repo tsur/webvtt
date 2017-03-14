@@ -1,5 +1,47 @@
 #ui-sub {
 
+	.notification {
+		position: absolute;
+    top: 35px;
+    right: 35px;
+    width: 280px;
+    z-index: 100;
+		height: 65px;
+    padding: 0 15px;
+    background-color: rgba(47, 49, 41, 0.9);
+    text-align: center;
+    font-size: 12px;
+    color: rgba(241, 228, 190, 0.6);
+
+		a {
+			color: rgba(241, 228, 190, 0.5);
+	    text-decoration: underline;
+			display: inline-block;
+		}
+
+		textarea {
+			width:1px;
+			height:1px;
+			position:absolute;
+			left:-100px;
+			top:-100px;
+		}
+
+		span {
+			float: right;
+			position: relative;
+			font-size: 24px;
+			margin-right: 10px;
+			cursor: pointer;
+			right: -10px;
+		}
+
+		p {
+			padding: 18px;
+    	margin: 0;
+		}
+	}
+
 	.overlay {
 
 		z-index: 10;
@@ -197,6 +239,32 @@
 			a {
 				text-decoration: none;
 			}
+
+			button.disabled, button.loading-container {
+				color: rgba(255, 255, 255, 0.1);
+				pointer-events: none;
+			}
+
+			button.loading-container .loading{
+				border-radius: 50%;
+				width: 1px;
+				height: 1px;
+				border-top-color: white;
+				-webkit-animation: spin 1s infinite linear;
+				animation: spin 1s infinite linear;
+				border-style: double;
+				border-width: .4rem;
+				position: absolute;
+				top: 50px;
+				left: 50%;
+				display: inline;
+			}
+
+			button .loading{
+				display: none;
+			}
+
+
 	}
 
 	.gear-menu-content:before {
@@ -364,9 +432,9 @@
 
     color: #6b6b6b;
     position: absolute;
-    top: 60%;
+    top: 55%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-40%,-50%);
 
   }
 

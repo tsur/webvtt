@@ -8,7 +8,7 @@
 // ==========================================================================
 
 // import Whammy from './whammy';
-//var Whammy = require('../../whammy');
+// var Whammy = require('../../whammy');
 
 ;(function(root, factory) {
     'use strict';
@@ -1106,9 +1106,11 @@
                     plyr.currentCaption = plyr.captions[plyr.subcount][1];
 
                 // Render the caption
+                console.log('set currentcaption')
                 _setCaption(plyr.currentCaption);
             }
             else {
+              console.log('set caption')
                 _setCaption();
             }
         }
@@ -1523,6 +1525,22 @@
             _setTitle(_getElement('iframe'));
         }
 
+        // Play video function
+        function playVid(video, onplaying) {
+            if (video.paused && !onplaying) {
+                console.log('>>>>>>>>>>>> PLAYING');
+                video.play();
+            }
+        }
+
+        // Pause video function
+        function pauseVid(video, onpause) {
+            if (!video.paused && !onpause) {
+              console.log('>>>>>>>>>>>> PAUSING');
+                video.pause();
+            }
+        }
+
         // Handle YouTube API ready
         function _youTubeReady(videoId, container) {
             // Setup timers object
@@ -1558,6 +1576,8 @@
                     'onReady': function(event) {
                         // Get the instance
                         var instance = event.target;
+                        plyr.mediaCapOnPlaying = false;
+                        plyr.mediaCapOnPause = false;
 
                         // Create a faux HTML5 API using the YouTube API
                         plyr.media.play = function() {
@@ -1584,7 +1604,8 @@
                         _triggerEvent(plyr.media, 'timeupdate');
 
                         // Reset timer
-                        window.clearInterval(plyr.timer.buffering);
+                        if(plyr.timer.buffering)
+                          window.clearInterval(plyr.timer.buffering);
 
                         // Setup buffering
                         plyr.timer.buffering = window.setInterval(function() {
@@ -1613,31 +1634,31 @@
                         // Load cap-mirroer video
                         plyr.mediaCapLoading = true;
                         //plyr.mediaCap.setAttribute('style', 'width:1px;height:1px;');
-                        plyr.container.appendChild(plyr.mediaCap);
+
                         // const video = new Whammy.Video();
                         // const c = document.createElement("canvas");
-                        //
+                        // console.log(plyr.media.duration);
                         // for(let i=0; i<plyr.media.duration; i++) video.add(c, 1000);
                         // video.compile(undefined, output => {
-                        //
+                        //   console.log(output);
                         //   plyr.mediaCap.src = window.URL.createObjectURL(output);
-                        //
                         //   _triggerEvent(plyr.media, 'cap-mirror');
-                        //
                         //   plyr.mediaCapLoading = false;
-                        //
                         // });
-                        plyr.mediaCap.src = "./sample.mp4";
-                         _triggerEvent(plyr.media, 'cap-mirror');
-                         plyr.mediaCapLoading = false;
 
+                        _triggerEvent(plyr.media, 'cap-mirror');
+                        plyr.mediaCapLoading = false;
                     },
                     'onStateChange': function(event) {
+
+                       console.log('state change', event.data);
+                       console.log(plyr.mediaCapOnPlaying, plyr.mediaCapOnPause);
                         // Get the instance
                         var instance = event.target;
 
                         // Reset timer
-                        window.clearInterval(plyr.timer.playing);
+                        if(plyr.timer.playing)
+                          window.clearInterval(plyr.timer.playing);
 
                         // Handle events
                         // -1   Unstarted
@@ -1647,11 +1668,17 @@
                         // 3    Buffering
                         // 5    Video cued
                         switch (event.data) {
+
+                            case -1:
+                                break;
+                            case 3:
+                                // set time mediaCap
+                                plyr.mediaCap.currentTime = parseInt(instance.getCurrentTime());
+                                break;
                             case 0:
                                 plyr.media.paused = true;
                                 _triggerEvent(plyr.media, 'ended');
                                 break;
-
                             case 1:
                                 plyr.media.paused = false;
                                 plyr.media.seeking = false;
@@ -1667,15 +1694,48 @@
                                     _triggerEvent(plyr.media, 'timeupdate');
                                 }, 100);
 
-                                plyr.mediaCap.play();
 
+                                // plyr.mediaCap.play();
+                                console.log('here??')
+                                plyr.mediaCap.currentTime = parseInt(instance.getCurrentTime());
+                                // Play video function
+                                // setTimeout(()=>{
+                                //   try{
+                                //
+                                //     // plyr.mediaCap.pause();
+                                //     plyr.mediaCap.currentTime = parseInt(instance.getCurrentTime());
+                                //
+                                //   }
+                                //   catch(e){
+                                //     console.error(e);
+                                //   }
+                                // }, 10);
+                                // playVid(plyr.mediaCap, plyr.mediaCapOnPlaying);
+                                // On video playing toggle values
+                                // plyr.mediaCap.onplaying = function() {
+                                //     plyr.mediaCapOnPlaying = true;
+                                //     plyr.mediaCapOnPause = false;
+                                //     console.log('<<<<', plyr.mediaCapOnPlaying, plyr.mediaCapOnPause);
+                                // };
+                                //
+                                // // On video pause toggle values
+                                // plyr.mediaCap.onpause = function() {
+                                //     plyr.mediaCapOnPlaying = false;
+                                //     plyr.mediaCapOnPause = true;
+                                //     console.log('<<<<', plyr.mediaCapOnPlaying, plyr.mediaCapOnPause);
+                                // };
                                 break;
 
                             case 2:
+                                if(plyr.timer.playing)
+                                  window.clearInterval(plyr.timer.playing);
                                 plyr.media.paused = true;
-                                _triggerEvent(plyr.media, 'pause');
-                                plyr.mediaCap.pause();
+                                // _triggerEvent(plyr.media, 'pause');
+                                // pauseVid(plyr.mediaCap, plyr.mediaCapOnPause);
+                                // setTimeout(()=>plyr.mediaCap.pause(), 10);
+                                // plyr.mediaCap.pause();
                                 break;
+
                         }
 
                         _triggerEvent(plyr.container, 'statechange', false, {
@@ -1937,8 +1997,9 @@
                 // YouTube
                 switch(plyr.type) {
                   case 'youtube-cap':
+                        // plyr.mediaCap.currentTime = parseInt(plyr.embed.getCurrentTime());
+                        // console.log(parseInt(plyr.embed.getCurrentTime()))
                         plyr.embed.seekTo(targetTime);
-                        plyr.mediaCap.currentTime = targetTime.toFixed(4);
                         break;
                   case 'youtube':
                         plyr.embed.seekTo(targetTime);
@@ -2566,7 +2627,7 @@
 
             if(plyr.type === 'youtube-cap'){
 
-              _removeAll(plyr.container.querySelectorAll('track'));
+              _removeAll(plyr.mediaCap.querySelectorAll('track'));
               _insertChildElements('track', tracks, plyr.mediaCap);
               return _setupCaptions(plyr.mediaCap);
             }
@@ -2691,9 +2752,16 @@
                 case "youtube-cap":
                     plyr.media = document.createElement('div');
                     plyr.mediaCap = document.createElement('video');
+
                     plyr.mediaCap.setAttribute('style', 'width:1px;height:1px;');
                     plyr.mediaCap.setAttribute('crossorigin', '');
+                    plyr.mediaCap.addEventListener('canplay', function(){
+                      plyr.mediaCap.play();
+                    })
+                    plyr.mediaCap.src = "./sample.webm";
+
                     plyr.embedId = source.sources[0].src;
+                    document.body.appendChild(plyr.mediaCap);
                     break;
             }
 
@@ -3200,6 +3268,7 @@
         }
 
         function _setupInterface() {
+
             // Don't setup interface if no support
             if (!plyr.supported.full) {
                 _log('No full support for this media type (' + plyr.type + ')', true);
