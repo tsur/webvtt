@@ -36006,6 +36006,8 @@ var _nodeExport_video = require('../../node/export_video');
 
 var _nodeExport_video2 = _interopRequireDefault(_nodeExport_video);
 
+var SHOULD_AUTOLOAD = true;
+
 (0, _util.inherits)(Viewer, _events.EventEmitter);
 
 function Viewer(app, proxyUrl) {
@@ -36121,6 +36123,10 @@ Viewer.prototype.initViewer = function () {
       _this.inputYoutube.value = data.v;
       // Load text
       _this.app.views.editor.setText(data.s);
+      // Load video automatically
+      if (SHOULD_AUTOLOAD) (0, _nodeYoutube2['default'])(data.v, _this.proxyUrl, function (tube) {
+        return _this.loadVideo(tube);
+      });
     }
   });
 };
@@ -36259,7 +36265,7 @@ Viewer.prototype.restore = function (cb) {
 };
 
 Viewer.prototype.displayNotification = function () {
-  var shareURL = '' + window.location.hostname + window.location.pathname + this.userID;
+  var shareURL = '' + window.location.host + window.location.pathname + this.userID;
   this.displayNotificationBox.querySelector('textarea').innerHTML = shareURL;
   this.displayNotificationBox.classList.remove('hidden');
 };
@@ -36332,7 +36338,7 @@ Viewer.prototype.render = function () {
     return _this5.initViewer();
   });
 
-  return (0, _virtualDom.h)('div', [(0, _virtualDom.h)('.modalbg', { id: 'openModal' }, (0, _virtualDom.h)('.dialog', [(0, _virtualDom.h)('a.close', { title: 'Close', href: '#close' }, '×'), (0, _virtualDom.h)('h2', 'WebVTT (v0.1.0)'), (0, _virtualDom.h)('p', 'This is an experiment for easily setting up subtitles to your videos on the fly. The idea came across after working on a personal project. I just wanted a quick and fast way to work with subtitles in my videos without having to install third party software for specific platforms and learning about them.'), (0, _virtualDom.h)('p', ['The idea was just to stay at the text editor the most of the time. For that, you may use the provided ', (0, _virtualDom.h)('span.shortcuts', ['shortcuts', (0, _virtualDom.h)('div.shorcuts-help', [(0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-SPACE>'), ' for toggling between Pausing/Resuming']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-F>'), ' for toggling between Full/Normal screen size']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-C>'), ' for toggling between Enabling/Disabling captions']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<SPACE-tm>'), ' for including a time mark 00:00:00.000']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])])]), ' to control the video player anytime you stay on the text editor.']), (0, _virtualDom.h)('p.fineprint', (0, _virtualDom.h)('a', { target: "_blank", href: 'https://github.com/Tsur/webvtt' }, 'Made with ♡ by Zuri Pabón'))])), (0, _virtualDom.h)('.export', { attributes: { "tabindex": "0" } }, [(0, _virtualDom.h)('img.icon', { src: './gear.svg' }), (0, _virtualDom.h)('div', (0, _virtualDom.h)('ul.gear-menu-content', [(0, _virtualDom.h)('li', (0, _virtualDom.h)('button.export-vtt', 'Export as vtt')), (0, _virtualDom.h)('li', (0, _virtualDom.h)('button.export-str', 'Export as str')), (0, _virtualDom.h)('li', (0, _virtualDom.h)('button.share.disabled', ['Save', (0, _virtualDom.h)('div', [(0, _virtualDom.h)('span.loading')])])), (0, _virtualDom.h)('li.separator'), (0, _virtualDom.h)('li', (0, _virtualDom.h)('button.about', (0, _virtualDom.h)('a', { href: "#openModal" }, 'About ...')))]))]), (0, _virtualDom.h)('.overlay.plyr', [(0, _virtualDom.h)('input.file', {
+  return (0, _virtualDom.h)('div', [(0, _virtualDom.h)('.modalbg', { id: 'openModal' }, (0, _virtualDom.h)('.dialog', [(0, _virtualDom.h)('a.close', { title: 'Close', href: '#close' }, '×'), (0, _virtualDom.h)('h2', 'WebVTT (v0.1.0)'), (0, _virtualDom.h)('p', 'This is an experiment for easily setting up subtitles to your videos on the fly. The idea came across after working on a personal project. I just wanted a quick and fast way to work with subtitles in my videos without having to install third party software for specific platforms and learning about them.'), (0, _virtualDom.h)('p', ['The idea was just to stay at the text editor the most of the time. For that, you may use the provided ', (0, _virtualDom.h)('span.shortcuts', ['shortcuts', (0, _virtualDom.h)('div.shorcuts-help', [(0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-SPACE>'), ' for toggling between Pausing/Resuming']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-F>'), ' for toggling between Full/Normal screen size']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-C>'), ' for toggling between Enabling/Disabling captions']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-Q>/<Alt-Shift-Q>'), ' for forwarding 1 sec back and forth']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-W>/<Alt-Shift-W>'), ' for forwarding 10 secs back and forth']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<Alt-E>/<Alt-Shift-E>'), ' for forwarding 1 min back and forth']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<SPACE-tm>'), ' for including a time mark 00:00:00.000']), (0, _virtualDom.h)('p', [(0, _virtualDom.h)('strong', '<SPACE-tmf>'), ' for including a full time mark 00:00:00.000 --> 00:00:00.000'])])]), ' to control the video player anytime you stay on the text editor.']), (0, _virtualDom.h)('p.fineprint', (0, _virtualDom.h)('a', { target: "_blank", href: 'https://github.com/Tsur/webvtt' }, 'Made with ♡ by Zuri Pabón'))])), (0, _virtualDom.h)('.export', { attributes: { "tabindex": "0" } }, [(0, _virtualDom.h)('a.share.disabled', ['Share', (0, _virtualDom.h)('div', [(0, _virtualDom.h)('span.loading')])]), (0, _virtualDom.h)('img.icon', { src: './gear.svg' }), (0, _virtualDom.h)('div', (0, _virtualDom.h)('ul.gear-menu-content', [(0, _virtualDom.h)('li', (0, _virtualDom.h)('button.export-vtt', 'Export as vtt')), (0, _virtualDom.h)('li', (0, _virtualDom.h)('button.export-str', 'Export as str')), (0, _virtualDom.h)('li.separator'), (0, _virtualDom.h)('li', (0, _virtualDom.h)('button.about', (0, _virtualDom.h)('a', { href: "#openModal" }, 'About ...')))]))]), (0, _virtualDom.h)('.overlay.plyr', [(0, _virtualDom.h)('input.file', {
     type: 'file'
   }), (0, _virtualDom.h)('p', 'DROP YOUR TUBE HERE'), (0, _virtualDom.h)('input.youtube', {
     type: 'text',
