@@ -35,6 +35,9 @@ function Viewer(app, proxyUrl) {
 
 Viewer.prototype.initViewer = function() {
 
+  this.overlayLoading = document.querySelector('.overlay-loading');
+  this.overlayLoading.classList.remove('hidden');
+
   firebase.initializeApp({
     apiKey: "AIzaSyALlgfuOAu4pHx09H_ZEletYWyYqraTFwE",
     authDomain: "webvtt-6b238.firebaseapp.com",
@@ -60,12 +63,12 @@ Viewer.prototype.initViewer = function() {
     this.inputYoutube = document.querySelector('.overlay input.youtube');
     this.video = document.querySelector('.overlay video');
     this.overlay = document.querySelector('.overlay');
-    this.overlayLoading = document.querySelector('.overlay-loading');
     this.exportStrBtn = document.querySelector('.export-str');
     this.exportVttBtn = document.querySelector('.export-vtt');
     this.shareBtn = document.querySelector('.share');
     this.displayNotificationBox = document.querySelector('.notification');
 
+    this.overlayLoading.classList.add('hidden');
     this.video.setAttribute('crossorigin', 'anonymous');
 
     this.overlayClickEvent = event => {
