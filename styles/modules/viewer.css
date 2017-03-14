@@ -66,7 +66,7 @@
 			font-size: 30px;
 			/* display: block; */
 			position: relative;
-			top: 260px;
+			top: calc(50% - 70px);
 			transform: (-50%, -50%);
 
 		}
@@ -163,7 +163,6 @@
     /* background-color: #272822; */
     top: 10px;
     right: 10px;
-    width: 20px;
     height: 20px;
     text-align: center;
     top: 5px;
@@ -180,11 +179,11 @@
 
   }
 
-	.export:focus {
+	.export .icon:focus {
 			/* clicking on label should toggle the menu */
 			pointer-events: none;
 	}
-	.export:focus .gear-menu-content {
+	.export .icon:focus .gear-menu-content {
 			/*  opacity is 1 in opened state (see below) */
 			opacity: 1;
 			visibility: visible;
@@ -239,31 +238,6 @@
 			a {
 				text-decoration: none;
 			}
-
-			button.disabled, button.loading-container {
-				color: rgba(255, 255, 255, 0.1);
-				pointer-events: none;
-			}
-
-			button.loading-container .loading{
-				border-radius: 50%;
-				width: 1px;
-				height: 1px;
-				border-top-color: white;
-				-webkit-animation: spin 1s infinite linear;
-				animation: spin 1s infinite linear;
-				border-style: double;
-				border-width: .4rem;
-				position: absolute;
-				top: 50px;
-				left: 50%;
-				display: inline;
-			}
-
-			button .loading{
-				display: none;
-			}
-
 
 	}
 
@@ -437,5 +411,40 @@
     transform: translate(-40%,-50%);
 
   }
+
+	.share {
+		float: left;
+		margin-right: 15px;
+		color: rgba(255, 255, 255, 0.5);
+		border-bottom: 1px dotted gray;
+	}
+
+	.share.disabled {
+		display: none;
+	}
+
+	.share.loading-container {
+		color: rgba(255, 255, 255, 0.1);
+		pointer-events: none;
+	}
+
+	.share.loading-container .loading{
+		border-radius: 15%;
+		width: 1px;
+		height: 1px;
+		border-top-color: white;
+		-webkit-animation: spin 1s infinite linear;
+		animation: spin 1s infinite linear;
+		border-style: double;
+		border-width: .4rem;
+		position: absolute;
+		top: 7px;
+		left: -12px;
+		display: inline;
+	}
+
+	.share .loading{
+		display: none;
+	}
 
 }

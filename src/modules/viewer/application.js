@@ -24,6 +24,8 @@ import plyr from '../../plyr';
 import getYoutube from '../../node/youtube';
 import exportVideo from '../../node/export_video';
 
+const SHOULD_AUTOLOAD = true;
+
 inherits(Viewer, EventEmitter);
 
 function Viewer(app, proxyUrl) {
@@ -121,6 +123,8 @@ Viewer.prototype.initViewer = function() {
       this.inputYoutube.value = data.v;
       // Load text
       this.app.views.editor.setText(data.s);
+      // Load video automatically
+      if(SHOULD_AUTOLOAD) getYoutube(data.v, this.proxyUrl, tube => this.loadVideo(tube));
     }
 
   });
@@ -271,7 +275,7 @@ Viewer.prototype.restore = function(cb) {
 };
 
 Viewer.prototype.displayNotification = function() {
-  const shareURL = `${window.location.hostname}${window.location.pathname}${this.userID}`;
+  const shareURL = `${window.location.host}${window.location.pathname}${this.userID}`;
   this.displayNotificationBox.querySelector('textarea').innerHTML = shareURL;
   this.displayNotificationBox.classList.remove('hidden');
 };
@@ -360,12 +364,12 @@ Viewer.prototype.render = function() {
         h('p.fineprint', h('a', {target:"_blank", href:'https://github.com/Tsur/webvtt'}, 'Made with ♡ by Zuri Pabón'))
       ])),
       h('.export', {attributes: {"tabindex": "0"} }, [
+        h('a.share.disabled', ['Share', h('div', [h('span.loading')])]),
         h('img.icon', {src: './gear.svg'}),
         h('div',
             h('ul.gear-menu-content', [
               h('li', h('button.export-vtt', 'Export as vtt')),
               h('li', h('button.export-str', 'Export as str')),
-              h('li', h('button.share.disabled', ['Save', h('div', [h('span.loading')])])),
               h('li.separator'),
               h('li', h('button.about', h('a', {href: "#openModal"}, 'About ...')))
             ]))
