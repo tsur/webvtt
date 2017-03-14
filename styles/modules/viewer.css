@@ -240,10 +240,31 @@
 				text-decoration: none;
 			}
 
-			button.disabled {
+			button.disabled, button.loading-container {
 				color: rgba(255, 255, 255, 0.1);
 				pointer-events: none;
 			}
+
+			button.loading-container .loading{
+				border-radius: 50%;
+				width: 1px;
+				height: 1px;
+				border-top-color: white;
+				-webkit-animation: spin 1s infinite linear;
+				animation: spin 1s infinite linear;
+				border-style: double;
+				border-width: .4rem;
+				position: absolute;
+				top: 50px;
+				left: 50%;
+				display: inline;
+			}
+
+			button .loading{
+				display: none;
+			}
+
+
 	}
 
 	.gear-menu-content:before {

@@ -99,7 +99,9 @@
 #ui-sub .gear-menu-content li.separator {margin: 5px;border-bottom: 1px dotted grey;}
 #ui-sub .gear-menu-content a, #ui-sub .gear-menu-content button {background: transparent;border: none;color: inherit;cursor: inherit;outline: 0;cursor: pointer;font-size: 12px;}
 #ui-sub .gear-menu-content a {text-decoration: none;}
-#ui-sub .gear-menu-content button.disabled {color: rgba(255, 255, 255, 0.1);pointer-events: none;}
+#ui-sub .gear-menu-content button.disabled, #ui-sub .gear-menu-content button.loading-container {color: rgba(255, 255, 255, 0.1);pointer-events: none;}
+#ui-sub .gear-menu-content button.loading-container .loading{border-radius: 50%;width: 1px;height: 1px;border-top-color: white;-webkit-animation: spin 1s infinite linear;animation: spin 1s infinite linear;border-style: double;border-width:6px;border-width: .4rem;position: absolute;top: 50px;left: 50%;display: inline;}
+#ui-sub .gear-menu-content button .loading{display: none;}
 #ui-sub .gear-menu-content:before {content: "";width: 0;height: 0;border-bottom: 10px solid #6b6b6b;border-left: 10px solid transparent;border-right: 10px solid transparent;position: absolute;top: -10px;right: 10px;}
 #ui-sub .modalbg {position: fixed;font-family: Arial, Helvetica, sans-serif;top: 0;right: 0;bottom: 0;left: 0;background: rgba(0, 0, 0, 0);z-index: 99999;-webkit-transition: all 0.5s ease-out;transition: all 0.5s ease-out;-webkit-transition-delay: 0.2s;-moz-transition-delay: 0.2s;-o-transition-delay: 0.2s;-transition-delay: 0.2s;display: block;pointer-events: none;}
 #ui-sub .modalbg .dialog {width: 500px;position: relative;top: -1000px;margin: 10% auto;padding: 5px 20px 13px 20px;border-radius: 10px;background: #272822;box-shadow: 0 0 10px #000;-moz-box-shadow: 0 0 10px #000;-webkit-box-shadow: 0 0 10px #000;color: #6b6b6b;line-height: 1.4em;}

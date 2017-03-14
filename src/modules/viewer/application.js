@@ -278,6 +278,9 @@ Viewer.prototype.displayNotification = function() {
 
 Viewer.prototype.share = function() {
 
+  // Save ongoing ...
+  this.shareBtn.classList.add('loading-container');
+
   // Generate or retrieve ID
   const id = this.userID || this.getUserID();
   // Get Video ID
@@ -291,6 +294,8 @@ Viewer.prototype.share = function() {
     if(error) return;
 
     if(!this.userID) this.setUserID(id);
+
+    this.shareBtn.classList.remove('loading-container');
 
     // Display Notification to user
     this.displayNotification();
@@ -360,7 +365,7 @@ Viewer.prototype.render = function() {
             h('ul.gear-menu-content', [
               h('li', h('button.export-vtt', 'Export as vtt')),
               h('li', h('button.export-str', 'Export as str')),
-              h('li', h('button.share.disabled', 'Save')),
+              h('li', h('button.share.disabled', ['Save', h('div', [h('span.loading')])])),
               h('li.separator'),
               h('li', h('button.about', h('a', {href: "#openModal"}, 'About ...')))
             ]))
