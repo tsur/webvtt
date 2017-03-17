@@ -35994,9 +35994,9 @@ var firebase = _interopRequireWildcard(_firebase);
 // Note: replace for next line in production once you get changes into plyr
 // import plyr from 'plyr';
 
-var _plyr = require('../../plyr');
+var _plyr_mobile = require('../../plyr_mobile');
 
-var _plyr2 = _interopRequireDefault(_plyr);
+var _plyr_mobile2 = _interopRequireDefault(_plyr_mobile);
 
 var _nodeYoutube = require('../../node/youtube');
 
@@ -36157,7 +36157,7 @@ Viewer.prototype.loadVideo = function (file) {
   this.overlay.removeEventListener('click', this.overlayClickEvent);
   this.overlayClickEvent = null;
 
-  var player = _plyr2['default'].setup(this.overlay, { captions: { defaultActive: true } })[0];
+  var player = _plyr_mobile2['default'].setup(this.overlay, { captions: { defaultActive: true } })[0];
 
   var videoType = file.type ? file.type : 'video/mp4';
   var src = file.url ? { src: file.id, type: 'youtube-cap' } : { src: window.URL.createObjectURL(file), type: videoType };
@@ -36352,7 +36352,7 @@ Viewer.prototype.render = function () {
 exports['default'] = Viewer;
 module.exports = exports['default'];
 
-},{"../../node/export_video":121,"../../node/youtube":122,"../../plyr":123,"events":18,"firebase":22,"util":76,"virtual-dom":80}],121:[function(require,module,exports){
+},{"../../node/export_video":121,"../../node/youtube":122,"../../plyr_mobile":123,"events":18,"firebase":22,"util":76,"virtual-dom":80}],121:[function(require,module,exports){
 'use strict';
 
 var vtt2srt = require('vtt-to-srt');
@@ -36690,7 +36690,9 @@ window.clearInterval(plyr.timer.playing); // Handle events
 switch(event.data){case 0:plyr.media.paused = true;_triggerEvent(plyr.media,'ended');break;case 1:plyr.media.paused = false;plyr.media.seeking = false;_triggerEvent(plyr.media,'play');_triggerEvent(plyr.media,'playing'); // Poll to get playback progress
 plyr.timer.playing = window.setInterval(function(){ // Set the current time
 plyr.media.currentTime = instance.getCurrentTime(); // Trigger timeupdate
-_triggerEvent(plyr.media,'timeupdate');},100);plyr.mediaCap.play();break;case 2:plyr.media.paused = true;_triggerEvent(plyr.media,'pause');plyr.mediaCap.pause();break;}_triggerEvent(plyr.container,'statechange',false,{code:event.data});}}});} // Vimeo ready
+_triggerEvent(plyr.media,'timeupdate');},100); //plyr.mediaCap.play();
+plyr.mediaCap.currentTime = instance.getCurrentTime();break;case 2:plyr.media.paused = true;_triggerEvent(plyr.media,'pause'); //plyr.mediaCap.pause();
+break;}_triggerEvent(plyr.container,'statechange',false,{code:event.data});}}});} // Vimeo ready
 function _vimeoReady(){ /* jshint validthis: true */plyr.embed = $f(this); // Setup on ready
 plyr.embed.addEvent('ready',function(){ // Create a faux HTML5 API using the Vimeo API
 plyr.media.play = function(){plyr.embed.api('play');plyr.media.paused = false;};plyr.media.pause = function(){plyr.embed.api('pause');plyr.media.paused = true;};plyr.media.stop = function(){plyr.embed.api('stop');plyr.media.paused = true;};plyr.media.paused = true;plyr.media.currentTime = 0; // Update UI
@@ -36709,8 +36711,8 @@ _triggerEvent(plyr.media,'timeupdate');});plyr.embed.getDuration(function(value)
 _displayDuration();});plyr.embed.bind(window.SC.Widget.Events.PLAY,function(){plyr.media.paused = false;_triggerEvent(plyr.media,'play');_triggerEvent(plyr.media,'playing');});plyr.embed.bind(window.SC.Widget.Events.PAUSE,function(){plyr.media.paused = true;_triggerEvent(plyr.media,'pause');});plyr.embed.bind(window.SC.Widget.Events.PLAY_PROGRESS,function(data){plyr.media.seeking = false;plyr.media.currentTime = data.currentPosition / 1000;_triggerEvent(plyr.media,'timeupdate');});plyr.embed.bind(window.SC.Widget.Events.LOAD_PROGRESS,function(data){plyr.media.buffered = data.loadProgress;_triggerEvent(plyr.media,'progress');if(parseInt(data.loadProgress) === 1){ // Trigger event
 _triggerEvent(plyr.media,'canplaythrough');}});plyr.embed.bind(window.SC.Widget.Events.FINISH,function(){plyr.media.paused = true;_triggerEvent(plyr.media,'ended');}); // Autoplay
 if(config.autoplay){plyr.embed.play();}});} // Play media
-function _play(){if('play' in plyr.media){plyr.media.play();}} // Pause media
-function _pause(){if('pause' in plyr.media){plyr.media.pause();}} // Toggle playback
+function _play(){if('play' in plyr.media){plyr.media.play();}if(plyr.mediaCap){plyr.mediaCap.play();}} // Pause media
+function _pause(){if('pause' in plyr.media){plyr.media.pause();}if(plyr.mediaCap){plyr.mediaCap.pause();}} // Toggle playback
 function _togglePlay(toggle){ // Play
 if(toggle === true){_play();} // Pause
 else if(toggle === false){_pause();} // True toggle

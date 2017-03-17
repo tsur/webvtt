@@ -1668,6 +1668,7 @@
                                 }, 100);
 
                                 //plyr.mediaCap.play();
+                                plyr.mediaCap.currentTime = instance.getCurrentTime();
 
                                 break;
 
