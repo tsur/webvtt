@@ -19,7 +19,7 @@ import * as firebase from 'firebase';
 
 // Note: replace for next line in production once you get changes into plyr
 // import plyr from 'plyr';
-import plyr from '../../plyr_mobile';
+import plyr from '../../plyr';
 
 import getYoutube from '../../node/youtube';
 import exportVideo from '../../node/export_video';
