@@ -1,8 +1,10 @@
 # WebVTT
 
-A WebVTT experiment for setting up subtitles to your videos on the fly. A demo is available [here](http://tsur.github.io/webvtt). You may also build a desktop version based on [Electron](https://github.com/atom/electron).
+A WebVTT experiment for setting up subtitles to your videos on the fly. A demo is available [here](http://tsur.github.io/webvtt). You may also build a desktop version based on [Electron](https://github.com/atom/electron). This is great for making small parodies :laughing:
 
-The idea came across after working on a personal project. I just wanted a quick and fast way to work with subtitles in my videos without having to install third party software for specific platforms and learning about them, and be able to stay at the text editor the most of the time. For that, you may use the provided shortcuts to control the video player anytime you stay on the text editor.
+![Webvtt](/demo.png)
+
+The idea came across after working on a personal project. I just wanted a quick and fast way to work with subtitles in my videos without having to install third party software for specific platforms and learning about them, and be able to stay at the text editor the most of the time. For that you may use the provided shortcuts to control the video player anytime you stay on the text editor.
 
 ```
 <Alt-SPACE> for toggling between Pausing/Resuming
